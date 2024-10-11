@@ -1,18 +1,41 @@
-name: Hello, World!
-description: Greet someone and record the time
-author: GitHub Actions
+name: Wait for Response Action
+description: Checks a URL and expects a response within a defined time and with a defined status.
+author: schwarzland.de
 
-# Define your inputs here.
 inputs:
-  who-to-greet:
-    description: Who to greet
+  url:
+    description: The URL to be checked.
     required: true
-    default: World
 
-# Define your outputs here.
+  expected-http-status:
+    description: The expected http status
+    required: false
+    default: '200'
+
+  interval:
+    description: The interval (milliseconds) determines how often the URL should be checked.
+    required: false
+    default: '1000'
+
+  timeout:
+    description: The timeout (seconds) determines when the check should be aborted.
+    required: false
+    default: '30'
+
+  abort-at-timeout:
+    description: Should the action be aborted on timeout (true), or should it continue running (false)
+    required: false
+    default: 'true'
+
 outputs:
   time:
-    description: The time we greeted you
+    description: The time until the desired status was reached.
+
+  timeout:
+    description: The timeout was reached (true).
+
+  desired-status:
+    description: The desired status has been reached (true).
 
 runs:
   using: node20

@@ -1,4 +1,37 @@
-# Hello, World! JavaScript Action
+# Wait for Response Action
+
+---
+
+Base: https://github.com/actions/javascript-action
+
+## Initial Setup for development
+
+### 🛠️ Install the dependencies
+
+```bash
+npm install
+```
+
+### 🏗️ Package the JavaScript for distribution
+
+```bash
+npm run bundle
+```
+
+### ✅ Run the tests
+
+```bash
+$ npm test
+```
+
+### Format, test, and build the action
+
+```bash
+npm run all
+```
+
+---
+
 
 [![GitHub Super-Linter](https://github.com/actions/hello-world-javascript-action/actions/workflows/linter.yml/badge.svg)](https://github.com/super-linter/super-linter)
 ![CI](https://github.com/actions/hello-world-javascript-action/actions/workflows/ci.yml/badge.svg)
