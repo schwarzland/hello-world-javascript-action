@@ -10,7 +10,9 @@ async function run() {
     const url = core.getInput('url', { required: true })
     core.info('URL: ${url}')
 
-    const expectedHttpStatus = core.getInput('expected-http-status', { required: false })
+    const expectedHttpStatus = core.getInput('expected-http-status', {
+      required: false
+    })
     core.info('expected-http-status: ${expectedHttpStatus}')
 
     const interval = core.getInput('interval', { required: false })
@@ -19,16 +21,17 @@ async function run() {
     const timeout = core.getInput('timeout', { required: false })
     core.info('timeout: ${timeout}')
 
-    const abortAtTimeout = core.getInput('abort-at-timeout', { required: false })
+    const abortAtTimeout = core.getInput('abort-at-timeout', {
+      required: false
+    })
     core.info('abort-at-timeout: ${abortAtTimeout}')
-
 
     // Get the current time and set as an output
     const time = new Date().toTimeString()
     core.setOutput('time', time)
 
-    const timeout = 'false'
-    core.setOutput('timeout', timeout)
+    const timeoutReached = 'false'
+    core.setOutput('timeout-reached', timeoutReached)
 
     const desiredStatus = 'false'
     core.setOutput('desired-status', desiredStatus)

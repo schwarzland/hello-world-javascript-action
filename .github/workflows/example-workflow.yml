@@ -16,19 +16,24 @@ on:
         type: string
 
       interval:
-        description: The interval (milliseconds) determines how often the URL should be checked.
+        description:
+          The interval (milliseconds) determines how often the URL should be
+          checked.
         required: false
         default: '1000'
         type: string
 
       timeout:
-        description: The timeout (seconds) determines when the check should be aborted.
+        description:
+          The timeout (seconds) determines when the check should be aborted.
         required: false
         default: '30'
         type: string
 
       abort-at-timeout:
-        description: Should the action be aborted on timeout (true), or should it continue running (false)
+        description:
+          Should the action be aborted on timeout (true), or should it continue
+          running (false)
         required: false
         default: 'true'
         type: string
@@ -54,7 +59,7 @@ jobs:
           expected-http-status: ${{ inputs.expected-http-status }}
           interval: ${{ inputs.interval }}
           timeout: ${{ inputs.timeout }}
-          abort-at-timeout: ${{ abort-at-timeout }}
+          abort-at-timeout: ${{ inputs.abort-at-timeout }}
 
       - name: Print Output
         id: output
