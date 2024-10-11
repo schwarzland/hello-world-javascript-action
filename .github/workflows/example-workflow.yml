@@ -65,5 +65,5 @@ jobs:
         id: output
         run: |
           echo "${{ steps.waitForResponse.outputs.time }}"
-          echo "${{ steps.waitForResponse.outputs.timeout }}"
+          echo "${{ steps.waitForResponse.outputs.timeout-reached }}"
           echo "${{ steps.waitForResponse.outputs.desired-status }}"
