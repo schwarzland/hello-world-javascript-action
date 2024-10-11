@@ -3,10 +3,34 @@ name: Example Workflow
 on:
   workflow_dispatch:
     inputs:
-      who-to-greet:
-        description: Who to greet in the log
+      url:
+        description: The URL to be checked
         required: true
-        default: 'World'
+        default: 'google.com'
+        type: string
+
+      expected-http-status:
+        description: The expected http status
+        required: false
+        default: '200'
+        type: string
+
+      interval:
+        description: The interval (milliseconds) determines how often the URL should be checked.
+        required: false
+        default: '1000'
+        type: string
+
+      timeout:
+        description: The timeout (seconds) determines when the check should be aborted.
+        required: false
+        default: '30'
+        type: string
+
+      abort-at-timeout:
+        description: Should the action be aborted on timeout (true), or should it continue running (false)
+        required: false
+        default: 'true'
         type: string
 
 permissions:
@@ -22,8 +46,19 @@ jobs:
       # Change @main to a specific commit SHA or version tag, e.g.:
       # actions/hello-world-javascript-action@e76147da8e5c81eaf017dede5645551d4b94427b
       # actions/hello-world-javascript-action@v1.2.3
-      - name: Print to Log
-        id: print-to-log
-        uses: actions/hello-world-javascript-action@main
+      - name: Wait for Response
+        id: waitForResponse
+        uses: actions/wait-for-response-action@main
         with:
-          who-to-greet: ${{ inputs.who-to-greet }}
+          url: ${{ inputs.url }}
+          expected-http-status: ${{ inputs.expected-http-status }}
+          interval: ${{ inputs.interval }}
+          timeout: ${{ inputs.timeout }}
+          abort-at-timeout: ${{ abort-at-timeout }}
+
+      - name: Print Output
+        id: output
+        run: |
+          echo "${{ steps.waitForResponse.outputs.time }}"
+          echo "${{ steps.waitForResponse.outputs.timeout }}"
+          echo "${{ steps.waitForResponse.outputs.desired-status }}"
