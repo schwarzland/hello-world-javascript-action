@@ -29861,13 +29861,34 @@ const github = __nccwpck_require__(3228)
  */
 async function run() {
   try {
-    // The `who-to-greet` input is defined in action metadata file
-    const whoToGreet = core.getInput('who-to-greet', { required: true })
-    core.info(`Hello, ${whoToGreet}!`)
+    const url = core.getInput('url', { required: true })
+    core.info('URL: ${url}')
+
+    const expectedHttpStatus = core.getInput('expected-http-status', {
+      required: false
+    })
+    core.info('expected-http-status: ${expectedHttpStatus}')
+
+    const interval = core.getInput('interval', { required: false })
+    core.info('interval: ${interval}')
+
+    const timeout = core.getInput('timeout', { required: false })
+    core.info('timeout: ${timeout}')
+
+    const abortAtTimeout = core.getInput('abort-at-timeout', {
+      required: false
+    })
+    core.info('abort-at-timeout: ${abortAtTimeout}')
 
     // Get the current time and set as an output
     const time = new Date().toTimeString()
     core.setOutput('time', time)
+
+    const timeoutReached = 'false'
+    core.setOutput('timeout-reached', timeoutReached)
+
+    const desiredStatus = 'false'
+    core.setOutput('desired-status', desiredStatus)
 
     // Output the payload for debugging
     core.info(
