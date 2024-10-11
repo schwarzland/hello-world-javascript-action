@@ -8,9 +8,11 @@ const github = require('@actions/github')
 async function run() {
   try {
     const url = core.getInput('url', { required: true })
-    core.info('URL: ${url}')
+    core.info('URL: ${url}', url)
 
-    const expectedHttpStatus = core.getInput('expected-http-status', {required: false})
+    const expectedHttpStatus = core.getInput('expected-http-status', {
+      required: false
+    })
     core.info(`expected-http-status ${expectedHttpStatus}`)
 
     const interval = core.getInput('interval', { required: false })
@@ -19,7 +21,9 @@ async function run() {
     const timeout = core.getInput('timeout', { required: false })
     core.info(`timeout ${timeout}`)
 
-    const abortAtTimeout = core.getInput('abort-at-timeout', { required: false })
+    const abortAtTimeout = core.getInput('abort-at-timeout', {
+      required: false
+    })
     core.info(`abort-at-timeout ${abortAtTimeout}`)
 
     // Get the current time and set as an output
