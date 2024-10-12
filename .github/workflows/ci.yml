@@ -60,7 +60,7 @@ jobs:
           request-headers: '{ "accept":"application/json" }'
           expected-http-status: '200'
           interval: '1000'
-          timeout: '10'
+          timeout: '5000'
           abort-at-timeout: 'false'
 
       - name: Print Output

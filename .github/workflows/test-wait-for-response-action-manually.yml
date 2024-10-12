@@ -6,7 +6,7 @@ on:
       url:
         description: The URL to be checked
         required: true
-        default: 'https://google.com'
+        default: 'https://api.sampleapis.com/simpsons/characters'
         type: string
 
       desired-method:
@@ -28,7 +28,7 @@ on:
         description: Request Headers in JSON-Format
         required: false
         default:
-          '{ "accept-encoding": "gzip, deflate, br, zstd", "accept":"text/html"}'
+          '{ "accept":"application/json" }'
         type: string
 
       expected-http-status:
