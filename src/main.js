@@ -56,14 +56,17 @@ async function run() {
     let inputParameters = getInputParameters();
 
     // try to get a response
+    let response = null;
+    let data = null;
+
     try {
         const options = {
             method: inputParameters.desiredMethod,
-            headers: inputParameters.requestHeaders
+            headers: new Headers(inputParameters.requestHeaders)
         }
 
-        const response = await fetch(inputParameters.url, options)
-        const data = await response.json()
+        response = await fetch(inputParameters.url, options)
+        data = await response.json()
 
         core.info(data)
 
@@ -71,7 +74,7 @@ async function run() {
         core.error ("Error: " + error);
 
         if (response?.status) {
-            core.error(" - Status: " + response.status);
+            core.error("Status: " + response.status);
         }
     }
 

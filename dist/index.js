@@ -35276,7 +35276,7 @@ const validateHeaderValue = typeof external_node_http_namespaceObject.validateHe
  * In all methods of this interface, header names are matched by case-insensitive byte sequence.
  *
  */
-class Headers extends URLSearchParams {
+class headers_Headers extends URLSearchParams {
 	/**
 	 * Headers class
 	 *
@@ -35287,7 +35287,7 @@ class Headers extends URLSearchParams {
 		// Validate and normalize init object in [name, value(s)][]
 		/** @type {string[][]} */
 		let result = [];
-		if (init instanceof Headers) {
+		if (init instanceof headers_Headers) {
 			const raw = init.raw();
 			for (const [name, values] of Object.entries(raw)) {
 				result.push(...values.map(value => [name, value]));
@@ -35465,7 +35465,7 @@ class Headers extends URLSearchParams {
  * Only need to do it for overridden methods
  */
 Object.defineProperties(
-	Headers.prototype,
+	headers_Headers.prototype,
 	['get', 'entries', 'forEach', 'values'].reduce((result, property) => {
 		result[property] = {enumerable: true};
 		return result;
@@ -35478,7 +35478,7 @@ Object.defineProperties(
  * @param {import('http').IncomingMessage['rawHeaders']} headers
  */
 function fromRawHeaders(headers = []) {
-	return new Headers(
+	return new headers_Headers(
 		headers
 			// Split into pairs
 			.reduce((result, value, index, array) => {
@@ -35543,7 +35543,7 @@ class Response extends Body {
 		// eslint-disable-next-line no-eq-null, eqeqeq, no-negated-condition
 		const status = options.status != null ? options.status : 200;
 
-		const headers = new Headers(options.headers);
+		const headers = new headers_Headers(options.headers);
 
 		if (body !== null && !headers.has('Content-Type')) {
 			const contentType = extractContentType(body, this);
@@ -35648,7 +35648,7 @@ class Response extends Body {
 			throw new TypeError('data is not JSON serializable');
 		}
 
-		const headers = new Headers(init && init.headers);
+		const headers = new headers_Headers(init && init.headers);
 
 		if (!headers.has('content-type')) {
 			headers.set('content-type', 'application/json');
@@ -36119,7 +36119,7 @@ class Request extends Body {
 			size: init.size || input.size || 0
 		});
 
-		const headers = new Headers(init.headers || input.headers || {});
+		const headers = new headers_Headers(init.headers || input.headers || {});
 
 		if (inputBody !== null && !headers.has('Content-Type')) {
 			const contentType = extractContentType(inputBody, this);
@@ -36259,7 +36259,7 @@ Object.defineProperties(Request.prototype, {
  */
 const getNodeRequestOptions = request => {
 	const {parsedURL} = request[request_INTERNALS];
-	const headers = new Headers(request[request_INTERNALS].headers);
+	const headers = new headers_Headers(request[request_INTERNALS].headers);
 
 	// Fetch step 1.3
 	if (!headers.has('Accept')) {
@@ -36540,7 +36540,7 @@ async function fetch(url, options_) {
 						// HTTP-redirect fetch step 6 (counter increment)
 						// Create a new Request object.
 						const requestOptions = {
-							headers: new Headers(request.headers),
+							headers: new headers_Headers(request.headers),
 							follow: request.follow,
 							counter: request.counter + 1,
 							agent: request.agent,
@@ -36831,14 +36831,17 @@ async function run() {
     let inputParameters = getInputParameters();
 
     // try to get a response
+    let response = null;
+    let data = null;
+
     try {
         const options = {
             method: inputParameters.desiredMethod,
-            headers: inputParameters.requestHeaders
+            headers: new Headers(inputParameters.requestHeaders)
         }
 
-        const response = await fetch(inputParameters.url, options)
-        const data = await response.json()
+        response = await fetch(inputParameters.url, options)
+        data = await response.json()
 
         core.info(data)
 
@@ -36846,7 +36849,7 @@ async function run() {
         core.error ("Error: " + error);
 
         if (response?.status) {
-            core.error(" - Status: " + response.status);
+            core.error("Status: " + response.status);
         }
     }
 
