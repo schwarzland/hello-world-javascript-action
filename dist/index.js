@@ -36853,7 +36853,8 @@ async function run() {
 
         try {
             // JSON?
-            data = await response.json();
+            const res = await response.clone();
+            data = await res.json();
             core.info("Response (JSON): " + JSON.stringify(data))
 
         } catch (error) {
@@ -36861,7 +36862,8 @@ async function run() {
 
             try {
                 // Text or HTML?
-                data = await response.text();
+                const res = await response.clone();
+                data = await res.text();
                 core.info("Response (String): " + data)
 
             } catch (error) {
