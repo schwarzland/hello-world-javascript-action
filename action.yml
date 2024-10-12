@@ -9,6 +9,17 @@ inputs:
     description: The URL to be checked.
     required: true
 
+  desired-method:
+    description:
+      Allowed methods are GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS
+    required: false
+    default: 'GET'
+
+  request-headers:
+    description: Request Headers in JSON-Format
+    required: false
+    default: ''
+
   expected-http-status:
     description: The expected http status
     required: false

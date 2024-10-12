@@ -29854,6 +29854,7 @@ function wrappy (fn, cb) {
 
 const core = __nccwpck_require__(7484)
 const github = __nccwpck_require__(3228)
+const fetch = __nccwpck_require__(5266)
 
 /**
  * The main function for the action.
@@ -29864,6 +29865,12 @@ async function run() {
     // Input
     const url = core.getInput('url', { required: true })
     core.info(`url: ${url}`)
+
+    const desiredMethod = core.getInput('desired-method', { required: true })
+    core.info(`desired-method: ${desiredMethod}`)
+
+    const requestHeaders = core.getInput('request-headers', { required: true })
+    core.info(`request-headers: ${requestHeaders}`)
 
     const expectedHttpStatus = core.getInput('expected-http-status', {
       required: false
@@ -29882,6 +29889,10 @@ async function run() {
     core.info(`abort-at-timeout: ${abortAtTimeout}`)
 
     // try to get a response
+    const options = { method: desiredMethod, headers: requestHeaders }
+    const response = await fetch(url, options)
+    const data = await response.json()
+    core.info(data)
 
     // Outputs
     const time = new Date().toTimeString()
@@ -29893,13 +29904,12 @@ async function run() {
     const desiredStatus = 'false'
     core.setOutput('desired-status', desiredStatus)
 
-    const response = 'some response'
     core.setOutput('response', response)
 
     // Output the payload for debugging
-    core.info(
-      `The event payload: ${JSON.stringify(github.context.payload, null, 2)}`
-    )
+    //    core.info(
+    //      `The event payload: ${JSON.stringify(github.context.payload, null, 2)}`
+    //    )
   } catch (error) {
     // Fail the workflow step if an error occurs
     core.setFailed(error.message)
@@ -29909,6 +29919,14 @@ async function run() {
 module.exports = {
   run
 }
+
+
+/***/ }),
+
+/***/ 5266:
+/***/ ((module) => {
+
+module.exports = eval("require")("node-fetch");
 
 
 /***/ }),

@@ -9,6 +9,28 @@ on:
         default: 'google.com'
         type: string
 
+      desired-method:
+        description:
+          Allowed methods are GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS
+        required: true
+        default: 'GET'
+        type: string
+        options:
+          - GET
+          - POST
+          - PUT
+          - PATCH
+          - DELETE
+          - HEAD
+          - OPTIONS
+
+      request-headers:
+        description: Request Headers in JSON-Format
+        required: false
+        default:
+          '{ "accept-encoding": "gzip, deflate, br, zstd", "accept":"text/html"}'
+        type: string
+
       expected-http-status:
         description: The expected http status
         required: false
@@ -56,6 +78,8 @@ jobs:
         uses: schwarzland/wait-for-response-action@main
         with:
           url: ${{ inputs.url }}
+          desired-method: ${{ inputs.desired-method }}
+          request-headers: ${{ inputs.request-headers }}
           expected-http-status: ${{ inputs.expected-http-status }}
           interval: ${{ inputs.interval }}
           timeout: ${{ inputs.timeout }}

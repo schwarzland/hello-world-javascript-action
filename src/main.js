@@ -1,5 +1,6 @@
 const core = require('@actions/core')
 const github = require('@actions/github')
+const fetch = require('node-fetch')
 
 /**
  * The main function for the action.
@@ -10,6 +11,12 @@ async function run() {
     // Input
     const url = core.getInput('url', { required: true })
     core.info(`url: ${url}`)
+
+    const desiredMethod = core.getInput('desired-method', { required: true })
+    core.info(`desired-method: ${desiredMethod}`)
+
+    const requestHeaders = core.getInput('request-headers', { required: true })
+    core.info(`request-headers: ${requestHeaders}`)
 
     const expectedHttpStatus = core.getInput('expected-http-status', {
       required: false
@@ -28,16 +35,10 @@ async function run() {
     core.info(`abort-at-timeout: ${abortAtTimeout}`)
 
     // try to get a response
-
-    const fetch = require('node-fetch');
-
-    const url = 'https://knifegrinder-backend.schwarz.goip.de/info';
-    const options = {method: 'GET', headers: {Authorization: 'Bearer {{accessToken}}'}};
-
-    const response = await fetch(url, options);
-    const data = await response.json();
-    core.info(data);
-
+    const options = { method: desiredMethod, headers: requestHeaders }
+    const response = await fetch(url, options)
+    const data = await response.json()
+    core.info(data)
 
     // Outputs
     const time = new Date().toTimeString()
@@ -49,13 +50,12 @@ async function run() {
     const desiredStatus = 'false'
     core.setOutput('desired-status', desiredStatus)
 
-    const response = 'some response'
     core.setOutput('response', response)
 
     // Output the payload for debugging
-//    core.info(
-//      `The event payload: ${JSON.stringify(github.context.payload, null, 2)}`
-//    )
+    //    core.info(
+    //      `The event payload: ${JSON.stringify(github.context.payload, null, 2)}`
+    //    )
   } catch (error) {
     // Fail the workflow step if an error occurs
     core.setFailed(error.message)
