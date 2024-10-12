@@ -65,16 +65,28 @@ async function run() {
     try {
         const options = {
             method: inputParameters.desiredMethod,
-            headers: new Headers(JSON.parse(inputParameters.requestHeaders))
+            headers: new Headers(JSON.parse(inputParameters.requestHeaders)),
+            signal: AbortSignal.timeout(parseInt(inputParameters.timeout))
         }
         response = await fetch(inputParameters.url, options)
 
         const data = await response.json();
         core.info("Response JSON: " + JSON.stringify(data));
-        core.setOutput('response', data)
+        core.setOutput('response', JSON.stringify(data))
 
     } catch (error) {
         core.error ("Error: " + error);
+
+        if (error.name === "TimeoutError") {
+            core.error("Timeout: It took more than 5 seconds to get the result!");
+        } else if (error.name === "AbortError") {
+            core.error("Fetch aborted by user action (browser stop button, closing tab, etc.");
+        } else if (error.name === "TypeError") {
+            core.error("AbortSignal.timeout() method is not supported");
+        } else {
+        // A network error, or some other problem.
+            core.error(`Error: type: ${error.name}, message: ${error.message}`);
+        }
     }
 
     // Outputs

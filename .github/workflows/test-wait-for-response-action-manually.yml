@@ -47,9 +47,9 @@ on:
 
       timeout:
         description:
-          The timeout (seconds) determines when the check should be aborted.
+          The timeout (milliseconds) determines when the check should be aborted.
         required: false
-        default: '30'
+        default: '5000'
         type: string
 
       abort-at-timeout:
