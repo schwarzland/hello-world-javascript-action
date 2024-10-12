@@ -29861,26 +29861,29 @@ const github = __nccwpck_require__(3228)
  */
 async function run() {
   try {
+    // Input
     const url = core.getInput('url', { required: true })
-    core.info('URL: ${url}', url)
+    core.info(`url: ${url}`)
 
     const expectedHttpStatus = core.getInput('expected-http-status', {
       required: false
     })
-    core.info(`expected-http-status ${expectedHttpStatus}`)
+    core.info(`expected-http-status: ${expectedHttpStatus}`)
 
     const interval = core.getInput('interval', { required: false })
-    core.info(`interval ${interval}`)
+    core.info(`interval: ${interval}`)
 
     const timeout = core.getInput('timeout', { required: false })
-    core.info(`timeout ${timeout}`)
+    core.info(`timeout: ${timeout}`)
 
-    const abortAtTimeout = core.getInput('abort-at-timeout', {
+    const abortAtTimeout = core.getBooleanInput('abort-at-timeout', {
       required: false
     })
-    core.info(`abort-at-timeout ${abortAtTimeout}`)
+    core.info(`abort-at-timeout: ${abortAtTimeout}`)
 
-    // Get the current time and set as an output
+    // try to get a response
+
+    // Outputs
     const time = new Date().toTimeString()
     core.setOutput('time', time)
 
@@ -29889,6 +29892,9 @@ async function run() {
 
     const desiredStatus = 'false'
     core.setOutput('desired-status', desiredStatus)
+
+    const response = 'some response'
+    core.setOutput('response', response)
 
     // Output the payload for debugging
     core.info(
