@@ -36857,7 +36857,7 @@ async function run() {
             core.info("Response (JSON): " + JSON.stringify(data))
 
         } catch (error) {
-            core.error ("Error (no JSON): " + await error.response.text());
+            core.error ("Error (no JSON): " + error);
 
             try {
                 // Text or HTML?
@@ -36865,13 +36865,13 @@ async function run() {
                 core.info("Response (String): " + data)
 
             } catch (error) {
-                core.error ("Error (no Text/HTML): " + await error.response.text());
+                core.error ("Error (no Text/HTML): " + error);
                 data = null;
             }
 
         }
     } catch (error) {
-        core.error ("Error: " + error.response.text());
+        core.error ("Error: " + error);
     }
 
     checkStatus (response);
