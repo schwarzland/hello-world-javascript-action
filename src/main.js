@@ -69,23 +69,9 @@ async function run() {
         }
         response = await fetch(inputParameters.url, options)
 
-        try {
-            const res = response.clone();
-            const data = await res.json();
-            core.info("Response JSON: " + JSON.stringify(data));
-            core.setOutput('response', data)
-        } catch (error) {
-            core.warning ("Response is no JSON");
-
-            try {
-                const res = response.clone();
-                const data = await res.text();
-                core.info("Response TEXT: " + data);
-                core.setOutput('response', data)
-            } catch (error) {
-                core.warning ("Response is no TEXT");
-            }
-        }
+        const data = await response.json();
+        core.info("Response JSON: " + JSON.stringify(data));
+        core.setOutput('response', data)
 
     } catch (error) {
         core.error ("Error: " + error);
@@ -100,6 +86,7 @@ async function run() {
 
     status = checkStatus (response);
     const desiredStatus = (status == inputParameters.expected-http-status ? true : false);
+    core.info ('...desired-status ' + desiredStatus);
     core.setOutput('desired-status', desiredStatus)
 
     // Output the payload for debugging
