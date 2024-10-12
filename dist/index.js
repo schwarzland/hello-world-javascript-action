@@ -36852,7 +36852,6 @@ async function run() {
       response = await fetch(inputParameters.url, options)
 
       const data = await response.json()
-      core.info('Response JSON: ' + JSON.stringify(data))
       core.setOutput('response', JSON.stringify(data))
     } catch (error) {
       core.error('Error: ' + error)
@@ -36871,15 +36870,13 @@ async function run() {
 
     // Outputs
     const time = new Date().getTime() - timeStart
-    core.info('time: ' + time)
     core.setOutput('time', time)
 
     const timeoutReached = 'false'
-    core.info('timeout-reached: ', timeoutReached)
     core.setOutput('timeout-reached', timeoutReached)
 
     const desiredStatus = checkStatus(response) == inputParameters.expectedHttpStatus ? true : false
-    core.info('desired-status: ', desiredStatus)
+    core.info('desired-status: ' + desiredStatus)
     core.setOutput('desired-status', desiredStatus)
 
     // Output the payload for debugging
