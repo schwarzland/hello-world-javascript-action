@@ -36859,8 +36859,10 @@ async function run() {
     const timeoutReached = 'false';
     core.setOutput('timeout-reached', timeoutReached)
 
-    status = checkStatus (response);
-    const desiredStatus = (status == inputParameters.expected-http-status ? true : false);
+    const desiredStatus = false;
+    if (checkStatus(response) == inputParameters.expected-http-status) {
+        desiredStatus = true;
+    }
     core.info ('...desired-status ' + desiredStatus);
     core.setOutput('desired-status', desiredStatus)
 
