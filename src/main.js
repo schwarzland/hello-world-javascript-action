@@ -1,6 +1,45 @@
 const core = require('@actions/core')
 const github = require('@actions/github')
-const fetch = require('node-fetch')
+import fetch from 'node-fetch';  // node-fetch from v3 is an ESM-only module - you are not able to import it with require(). https://www.npmjs.com/package/node-fetch
+
+class InputParameters {
+    url;
+    desiredMethod;
+    requestHeaders;
+    expectedHttpStatus;
+    interval;
+    timeout;
+    abortAtTimeout;
+}
+
+
+function getInputParameters () {
+    let inputParameters = new InputParameters();
+
+    inputParameters.url = core.getInput('url', { required: true })
+    core.info(`url: ${url}`)
+
+    inputParameters.desiredMethod = core.getInput('desired-method', { required: true })
+    core.info(`desired-method: ${desiredMethod}`)
+
+    inputParameters.requestHeaders = core.getInput('request-headers', { required: true })
+    core.info(`request-headers: ${requestHeaders}`)
+
+    inputParameters.expectedHttpStatus = core.getInput('expected-http-status', { required: false })
+    core.info(`expected-http-status: ${expectedHttpStatus}`)
+
+    inputParameters.interval = core.getInput('interval', { required: false })
+    core.info(`interval: ${interval}`)
+
+    inputParameters.timeout = core.getInput('timeout', { required: false })
+    core.info(`timeout: ${timeout}`)
+
+    inputParameters.abortAtTimeout = core.getBooleanInput('abort-at-timeout', { required: false })
+    core.info(`abort-at-timeout: ${abortAtTimeout}`)
+
+    core.info ("Input-Parameters: " + inputParameters);
+    return inputParameters;
+}
 
 /**
  * The main function for the action.
@@ -8,31 +47,7 @@ const fetch = require('node-fetch')
  */
 async function run() {
   try {
-    // Input
-    const url = core.getInput('url', { required: true })
-    core.info(`url: ${url}`)
-
-    const desiredMethod = core.getInput('desired-method', { required: true })
-    core.info(`desired-method: ${desiredMethod}`)
-
-    const requestHeaders = core.getInput('request-headers', { required: true })
-    core.info(`request-headers: ${requestHeaders}`)
-
-    const expectedHttpStatus = core.getInput('expected-http-status', {
-      required: false
-    })
-    core.info(`expected-http-status: ${expectedHttpStatus}`)
-
-    const interval = core.getInput('interval', { required: false })
-    core.info(`interval: ${interval}`)
-
-    const timeout = core.getInput('timeout', { required: false })
-    core.info(`timeout: ${timeout}`)
-
-    const abortAtTimeout = core.getBooleanInput('abort-at-timeout', {
-      required: false
-    })
-    core.info(`abort-at-timeout: ${abortAtTimeout}`)
+    let inputParameters = getInputParameters();
 
     // try to get a response
     const options = { method: desiredMethod, headers: requestHeaders }
