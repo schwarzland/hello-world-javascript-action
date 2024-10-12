@@ -36835,9 +36835,10 @@ async function run() {
     let data = null;
 
     try {
+
         const options = {
             method: inputParameters.desiredMethod,
-            headers: new Headers(inputParameters.requestHeaders)
+            headers: new Headers(JSON.parse(inputParameters.requestHeaders))
         }
 
         response = await fetch(inputParameters.url, options)

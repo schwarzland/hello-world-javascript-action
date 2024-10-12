@@ -57,7 +57,7 @@ jobs:
         with:
           url: 'https://google.com'
           desired-method: 'GET'
-          request-headers: '{ "accept-encoding": "gzip, deflate, br, zstd", "accept":"text/html"}'
+          request-headers: '{ "accept-encoding": "gzip, deflate, br, zstd", "accept":"text/html" }'
           expected-http-status: '200'
           interval: '1000'
           timeout: '10'
