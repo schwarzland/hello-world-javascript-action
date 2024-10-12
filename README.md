@@ -11,6 +11,8 @@ Know-How: https://github.com/actions/toolkit
 ### 🛠️ Install the dependencies
 
 ```bash
+npm install node-fetch
+
 npm install
 ```
 
