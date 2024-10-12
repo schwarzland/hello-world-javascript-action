@@ -36843,6 +36843,9 @@ async function run() {
     let body = null;
     let status = null;
 
+    let timeStart = new Date().getTime();
+    let timeEnd = null;
+
     try {
         const options = {
             method: inputParameters.desiredMethod,
@@ -36850,7 +36853,9 @@ async function run() {
         }
         response = await fetch(inputParameters.url, options)
         body = await response.text();
-        core.info("Response: " + body)
+        core.info("Response TEXT: " + body.substr(0, 100))
+        core.info("Response JSON" + JSON.parse(body))
+        timeEnd = new Date().getTime();
 
     } catch (error) {
         core.error ("Error: " + error);
@@ -36859,16 +36864,16 @@ async function run() {
     status = checkStatus (response);
 
     // Outputs
-    const time = new Date().toTimeString()
+    const time = timeEnd - timeStart;
     core.setOutput('time', time)
 
-    const timeoutReached = 'false'
-    core.setOutput('timeout-reached', timeoutReached)
-
-    const desiredStatus = status == inputParameters.expected-http-status ? true : false;
-    core.setOutput('desired-status', desiredStatus)
-
-    core.setOutput('response', body)
+//    const timeoutReached = 'false';
+//    core.setOutput('timeout-reached', timeoutReached)
+//
+//    const desiredStatus = status == inputParameters.expected-http-status ? true : false;
+//    core.setOutput('desired-status', desiredStatus)
+//
+//    core.setOutput('response', body)
 
     // Output the payload for debugging
     //    core.info(
@@ -36876,8 +36881,7 @@ async function run() {
     //    )
   } catch (error) {
     // Fail the workflow step if an error occurs
-    core.info("Mist")
-    core.setFailed(error.message)
+    core.setFailed("Ups ..." + error.message)
   }
 }
 
