@@ -36851,14 +36851,14 @@ async function run() {
         response = await fetch(inputParameters.url, options)
 
         try {
-            const res = await response.clone();
+            const res = response.clone();
             core.setOutput('response', await res.json())
         } catch (error) {
             core.warning ("Response is no JSON");
         }
 
         try {
-            const res = await response.clone();
+            const res = response.clone();
             core.setOutput('response', await res.text())
         } catch (error) {
             core.warning ("Response is no TEXT");
