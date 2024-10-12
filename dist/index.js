@@ -36851,15 +36851,15 @@ async function run() {
         response = await fetch(inputParameters.url, options)
 
         try {
-            const res = response.clone();
-            core.setOutput('response', res.json())
+            const res = await response.clone();
+            core.setOutput('response', await res.json())
         } catch (error) {
             core.warning ("Response is no JSON");
         }
 
         try {
-            const res = response.clone();
-            core.setOutput('response', res.text())
+            const res = await response.clone();
+            core.setOutput('response', await res.text())
         } catch (error) {
             core.warning ("Response is no TEXT");
         }
