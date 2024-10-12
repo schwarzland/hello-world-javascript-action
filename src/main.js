@@ -47,6 +47,14 @@ function getInputParameters () {
     return inputParameters;
 }
 
+function checkStatus (response) {
+    if (response?.status) {
+        core.error("Status: " + response.status + ", " + response.statusText);
+        return response.status;
+    }
+    return null;
+}
+
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
@@ -58,6 +66,7 @@ async function run() {
     // try to get a response
     let response = null;
     let data = null;
+    let status = null;
 
     try {
         const options = {
@@ -68,21 +77,29 @@ async function run() {
         response = await fetch(inputParameters.url, options)
 
         try {
+            // JSON?
             data = await response.json();
             core.info("Response (JSON): " + JSON.stringify(data))
+
         } catch (error) {
-            data = response;
-            core.info("Response (String): " + data)
-        }
+            core.error ("Error (no JSON): " + error.response.text());
 
+            try {
+                // Text or HTML?
+                data = response.text();
+                core.info("Response (String): " + data)
+
+            } catch (error) {
+                core.error ("Error (no Text/HTML): " + error.response.text());
+                data = null;
+            }
+
+        }
     } catch (error) {
-        core.error ("Error: " + error);
-
-        if (response?.status) {
-            core.error("Status: " + response.status);
-        }
+        core.error ("Error: " + error.response.text());
     }
 
+    checkStatus (response);
 
     // Outputs
     const time = new Date().toTimeString()
