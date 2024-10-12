@@ -36831,10 +36831,25 @@ async function run() {
     let inputParameters = getInputParameters();
 
     // try to get a response
-    const options = { method: desiredMethod, headers: requestHeaders }
-    const response = await fetch(url, options)
-    const data = await response.json()
-    core.info(data)
+    try {
+        const options = {
+            method: inputParameters.desiredMethod,
+            headers: inputParameters.requestHeaders
+        }
+
+        const response = await fetch(inputParameters.url, options)
+        const data = await response.json()
+
+        core.info(data)
+
+    } catch (error) {
+        core.info ("Error: " + error);
+
+        if (response?.status) {
+            core.info(" - Status: " + response.status);
+        }
+    }
+
 
     // Outputs
     const time = new Date().toTimeString()
