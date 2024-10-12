@@ -69,4 +69,4 @@ jobs:
           echo time ${{ steps.waitForResponse.outputs.time }}
           echo timeout-reached ${{ steps.waitForResponse.outputs.timeout-reached }}
           echo desired-status ${{ steps.waitForResponse.outputs.desired-status }}
-          echo response ${{ steps.waitForResponse.outputs.response }}
+#          echo response ${{ steps.waitForResponse.outputs.response }}
