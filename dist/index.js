@@ -36840,7 +36840,7 @@ async function run() {
 
     // try to get a response
     let response = null;
-    let data = null;
+    let body = null;
     let status = null;
 
     try {
@@ -36848,35 +36848,20 @@ async function run() {
             method: inputParameters.desiredMethod,
             headers: new Headers(JSON.parse(inputParameters.requestHeaders))
         }
-
         response = await fetch(inputParameters.url, options)
 
         try {
-            // JSON?
-            const res = await response.clone();
-            data = await res.json();
-            core.info("Response (JSON): " + JSON.stringify(data))
-
+            body = await response.text();
+            core.info("Response: " + body)
         } catch (error) {
-            core.error ("Error (no JSON): " + error);
-
-            try {
-                // Text or HTML?
-                const res = await response.clone();
-                data = await res.text();
-                core.info("Response (String): " + data)
-
-            } catch (error) {
-                core.error ("Error (no Text/HTML): " + error);
-                data = null;
-            }
-
+            core.error ("Error: " + error);
         }
+
     } catch (error) {
         core.error ("Error: " + error);
     }
 
-    checkStatus (response);
+    status = checkStatus (response);
 
     // Outputs
     const time = new Date().toTimeString()
@@ -36885,10 +36870,10 @@ async function run() {
     const timeoutReached = 'false'
     core.setOutput('timeout-reached', timeoutReached)
 
-    const desiredStatus = 'false'
+    const desiredStatus = status == inputParameters.expected-http-status ? true : false;
     core.setOutput('desired-status', desiredStatus)
 
-    core.setOutput('response', response)
+    core.setOutput('response', body)
 
     // Output the payload for debugging
     //    core.info(
