@@ -36835,16 +36835,20 @@ async function run() {
     let data = null;
 
     try {
-
         const options = {
             method: inputParameters.desiredMethod,
             headers: new Headers(JSON.parse(inputParameters.requestHeaders))
         }
 
         response = await fetch(inputParameters.url, options)
-        data = await response.json()
 
-        core.info(data)
+        try {
+            data = await response.json();
+            core.info("Response (JSON): " + JSON.stringify(data))
+        } catch (error) {
+            data = response;
+            core.info("Response (String): " + data)
+        }
 
     } catch (error) {
         core.error ("Error: " + error);
