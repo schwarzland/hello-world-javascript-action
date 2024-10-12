@@ -55,7 +55,7 @@ jobs:
         id: waitForResponse
         uses: schwarzland/wait-for-response-action@main
         with:
-          url: 'https://google.com'
+          url: 'https://api.sampleapis.com/simpsons/characters'
           desired-method: 'GET'
           request-headers: '{ "accept-encoding": "gzip, deflate, br, zstd", "accept":"text/html" }'
           expected-http-status: '200'

@@ -36824,7 +36824,7 @@ function getInputParameters () {
 
 function checkStatus (response) {
     if (response?.status) {
-        core.error("Status: " + response.status + ", " + response.statusText);
+        core.info("Status: " + response.status + ", " + response.statusText);
         return response.status;
     }
     return null;
@@ -36849,13 +36849,8 @@ async function run() {
             headers: new Headers(JSON.parse(inputParameters.requestHeaders))
         }
         response = await fetch(inputParameters.url, options)
-
-        try {
-            body = await response.text();
-            core.info("Response: " + body)
-        } catch (error) {
-            core.error ("Error: " + error);
-        }
+        body = await response.text();
+        core.info("Response: " + body)
 
     } catch (error) {
         core.error ("Error: " + error);
@@ -36881,6 +36876,7 @@ async function run() {
     //    )
   } catch (error) {
     // Fail the workflow step if an error occurs
+    core.info("Mist")
     core.setFailed(error.message)
   }
 }
