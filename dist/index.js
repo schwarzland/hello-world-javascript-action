@@ -36798,25 +36798,19 @@ function getInputParameters () {
     let inputParameters = new InputParameters();
 
     inputParameters.url = core.getInput('url', { required: true })
-    core.info(`url: ${inputParameters.url}`)
-
+//    core.info(`url: ${inputParameters.url}`)
     inputParameters.desiredMethod = core.getInput('desired-method', { required: true })
-    core.info(`desired-method: ${inputParameters.desiredMethod}`)
-
+//    core.info(`desired-method: ${inputParameters.desiredMethod}`)
     inputParameters.requestHeaders = core.getInput('request-headers', { required: true })
-    core.info(`request-headers: ${inputParameters.requestHeaders}`)
-
+//    core.info(`request-headers: ${inputParameters.requestHeaders}`)
     inputParameters.expectedHttpStatus = core.getInput('expected-http-status', { required: false })
-    core.info(`expected-http-status: ${inputParameters.expectedHttpStatus}`)
-
+//    core.info(`expected-http-status: ${inputParameters.expectedHttpStatus}`)
     inputParameters.interval = core.getInput('interval', { required: false })
-    core.info(`interval: ${inputParameters.interval}`)
-
+//    core.info(`interval: ${inputParameters.interval}`)
     inputParameters.timeout = core.getInput('timeout', { required: false })
-    core.info(`timeout: ${inputParameters.timeout}`)
-
+//    core.info(`timeout: ${inputParameters.timeout}`)
     inputParameters.abortAtTimeout = core.getBooleanInput('abort-at-timeout', { required: false })
-    core.info(`abort-at-timeout: ${inputParameters.abortAtTimeout}`)
+//    core.info(`abort-at-timeout: ${inputParameters.abortAtTimeout}`)
 
     core.info ("Input-Parameters: " + JSON.stringify(inputParameters));
     return inputParameters;
@@ -36852,16 +36846,18 @@ async function run() {
 
         try {
             const res = response.clone();
-            core.setOutput('response', await res.json())
+            const data = await res.json();
+            core.setOutput('response', data)
         } catch (error) {
             core.warning ("Response is no JSON");
-        }
 
-        try {
-            const res = response.clone();
-            core.setOutput('response', await res.text())
-        } catch (error) {
-            core.warning ("Response is no TEXT");
+            try {
+                const res = response.clone();
+                const data = await res.text();
+                core.setOutput('response', data)
+            } catch (error) {
+                core.warning ("Response is no TEXT");
+            }
         }
 
     } catch (error) {
