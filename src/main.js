@@ -89,19 +89,16 @@ async function run() {
         core.error ("Error: " + error);
     }
 
-    status = checkStatus (response);
-
     // Outputs
     const time = new Date().getTime() - timeStart;
     core.setOutput('time', time)
 
-//    const timeoutReached = 'false';
-//    core.setOutput('timeout-reached', timeoutReached)
-//
-//    const desiredStatus = status == inputParameters.expected-http-status ? true : false;
-//    core.setOutput('desired-status', desiredStatus)
-//
+    const timeoutReached = 'false';
+    core.setOutput('timeout-reached', timeoutReached)
 
+    status = checkStatus (response);
+    const desiredStatus = (status == inputParameters.expected-http-status ? true : false);
+    core.setOutput('desired-status', desiredStatus)
 
     // Output the payload for debugging
     //    core.info(
