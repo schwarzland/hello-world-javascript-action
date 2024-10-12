@@ -82,15 +82,15 @@ async function run() {
             core.info("Response (JSON): " + JSON.stringify(data))
 
         } catch (error) {
-            core.error ("Error (no JSON): " + error.response.text());
+            core.error ("Error (no JSON): " + await error.response.text());
 
             try {
                 // Text or HTML?
-                data = response.text();
+                data = await response.text();
                 core.info("Response (String): " + data)
 
             } catch (error) {
-                core.error ("Error (no Text/HTML): " + error.response.text());
+                core.error ("Error (no Text/HTML): " + await error.response.text());
                 data = null;
             }
 
