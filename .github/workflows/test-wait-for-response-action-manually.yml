@@ -6,7 +6,7 @@ on:
       url:
         description: The URL to be checked
         required: true
-        default: 'google.com'
+        default: 'https://google.com'
         type: string
 
       desired-method:

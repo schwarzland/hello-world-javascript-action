@@ -36818,7 +36818,7 @@ function getInputParameters () {
     inputParameters.abortAtTimeout = core.getBooleanInput('abort-at-timeout', { required: false })
     core.info(`abort-at-timeout: ${inputParameters.abortAtTimeout}`)
 
-    core.info ("Input-Parameters: " + inputParameters);
+    core.info ("Input-Parameters: " + JSON.stringify(inputParameters));
     return inputParameters;
 }
 
@@ -36843,10 +36843,10 @@ async function run() {
         core.info(data)
 
     } catch (error) {
-        core.info ("Error: " + error);
+        core.error ("Error: " + error);
 
         if (response?.status) {
-            core.info(" - Status: " + response.status);
+            core.error(" - Status: " + response.status);
         }
     }
 

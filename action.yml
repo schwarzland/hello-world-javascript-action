@@ -6,7 +6,7 @@ author: schwarzland.de
 
 inputs:
   url:
-    description: The URL to be checked.
+    description: The URL to be checked
     required: true
 
   desired-method:
