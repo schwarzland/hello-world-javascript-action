@@ -23,25 +23,25 @@ function getInputParameters () {
     let inputParameters = new InputParameters();
 
     inputParameters.url = core.getInput('url', { required: true })
-    core.info(`url: ${url}`)
+    core.info(`url: ${inputParameters.url}`)
 
     inputParameters.desiredMethod = core.getInput('desired-method', { required: true })
-    core.info(`desired-method: ${desiredMethod}`)
+    core.info(`desired-method: ${inputParameters.desiredMethod}`)
 
     inputParameters.requestHeaders = core.getInput('request-headers', { required: true })
-    core.info(`request-headers: ${requestHeaders}`)
+    core.info(`request-headers: ${inputParameters.requestHeaders}`)
 
     inputParameters.expectedHttpStatus = core.getInput('expected-http-status', { required: false })
-    core.info(`expected-http-status: ${expectedHttpStatus}`)
+    core.info(`expected-http-status: ${inputParameters.expectedHttpStatus}`)
 
     inputParameters.interval = core.getInput('interval', { required: false })
-    core.info(`interval: ${interval}`)
+    core.info(`interval: ${inputParameters.interval}`)
 
     inputParameters.timeout = core.getInput('timeout', { required: false })
-    core.info(`timeout: ${timeout}`)
+    core.info(`timeout: ${inputParameters.timeout}`)
 
     inputParameters.abortAtTimeout = core.getBooleanInput('abort-at-timeout', { required: false })
-    core.info(`abort-at-timeout: ${abortAtTimeout}`)
+    core.info(`abort-at-timeout: ${inputParameters.abortAtTimeout}`)
 
     core.info ("Input-Parameters: " + inputParameters);
     return inputParameters;
