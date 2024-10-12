@@ -36840,11 +36840,8 @@ async function run() {
 
     // try to get a response
     let response = null;
-    let body = null;
     let status = null;
-
     let timeStart = new Date().getTime();
-    let timeEnd = null;
 
     try {
         const options = {
@@ -36852,10 +36849,20 @@ async function run() {
             headers: new Headers(JSON.parse(inputParameters.requestHeaders))
         }
         response = await fetch(inputParameters.url, options)
-        body = await response.text();
-        core.info("Response TEXT: " + body.substr(0, 100))
-        core.info("Response JSON" + JSON.parse(body))
-        timeEnd = new Date().getTime();
+
+        try {
+            const res = response.clone();
+            core.setOutput('response', res.json())
+        } catch (error) {
+            core.warning ("Response is no JSON");
+        }
+
+        try {
+            const res = response.clone();
+            core.setOutput('response', res.text())
+        } catch (error) {
+            core.warning ("Response is no TEXT");
+        }
 
     } catch (error) {
         core.error ("Error: " + error);
@@ -36864,7 +36871,7 @@ async function run() {
     status = checkStatus (response);
 
     // Outputs
-    const time = timeEnd - timeStart;
+    const time = new Date().getTime() - timeStart;
     core.setOutput('time', time)
 
 //    const timeoutReached = 'false';
@@ -36873,7 +36880,7 @@ async function run() {
 //    const desiredStatus = status == inputParameters.expected-http-status ? true : false;
 //    core.setOutput('desired-status', desiredStatus)
 //
-//    core.setOutput('response', body)
+
 
     // Output the payload for debugging
     //    core.info(
