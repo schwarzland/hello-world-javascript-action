@@ -72,6 +72,7 @@ async function run() {
         try {
             const res = response.clone();
             const data = await res.json();
+            core.info("Response JSON: " + JSON.stringify(data));
             core.setOutput('response', data)
         } catch (error) {
             core.warning ("Response is no JSON");
@@ -79,6 +80,7 @@ async function run() {
             try {
                 const res = response.clone();
                 const data = await res.text();
+                core.info("Response TEXT: " + data);
                 core.setOutput('response', data)
             } catch (error) {
                 core.warning ("Response is no TEXT");
