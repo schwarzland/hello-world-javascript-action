@@ -1,6 +1,12 @@
+export { run }
+
 const core = require('@actions/core')
 const github = require('@actions/github')
-import fetch from 'node-fetch';  // node-fetch from v3 is an ESM-only module - you are not able to import it with require(). https://www.npmjs.com/package/node-fetch
+
+// node-fetch from v3 is an ESM-only module - you are not able to import it with require()
+// https://www.npmjs.com/package/node-fetch
+import fetch from 'node-fetch';
+
 
 class InputParameters {
     url;
@@ -75,8 +81,4 @@ async function run() {
     // Fail the workflow step if an error occurs
     core.setFailed(error.message)
   }
-}
-
-module.exports = {
-  run
 }
