@@ -10,8 +10,7 @@ on:
         type: string
 
       desired-method:
-        description:
-          Allowed methods are GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS
+        description: Allowed methods are GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS
         required: true
         default: 'GET'
         type: string
@@ -27,8 +26,7 @@ on:
       request-headers:
         description: Request Headers in JSON-Format
         required: false
-        default:
-          '{ "accept":"application/json" }'
+        default: '{ "accept":"application/json" }'
         type: string
 
       expected-http-status:
@@ -38,24 +36,20 @@ on:
         type: string
 
       interval:
-        description:
-          The interval (milliseconds) determines how often the URL should be
-          checked.
+        description: The interval (milliseconds) determines how often the URL should be checked.
         required: false
         default: '1000'
         type: string
 
       timeout:
-        description:
-          The timeout (milliseconds) determines when the check should be aborted.
+        description: The timeout (milliseconds) determines when the check should be aborted.
         required: false
         default: '5000'
         type: string
 
       abort-at-timeout:
         description:
-          Should the action be aborted on timeout (true), or should it continue
-          running (false)
+          Should the action be aborted on timeout (true), or should it continue running (false)
         required: false
         default: true
         type: boolean

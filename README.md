@@ -39,14 +39,14 @@ npm run all
 [![GitHub Super-Linter](https://github.com/actions/hello-world-javascript-action/actions/workflows/linter.yml/badge.svg)](https://github.com/super-linter/super-linter)
 ![CI](https://github.com/actions/hello-world-javascript-action/actions/workflows/ci.yml/badge.svg)
 
-This action prints `Hello, World!` or `Hello, <who-to-greet>!` to the log. To
-learn how this action was built, see
+This action prints `Hello, World!` or `Hello, <who-to-greet>!` to the log. To learn how this action
+was built, see
 [Creating a JavaScript action](https://docs.github.com/en/actions/creating-actions/creating-a-javascript-action).
 
 ## Create Your Own Action
 
-To create your own action, you can use this repository as a template! Just
-follow the below instructions:
+To create your own action, you can use this repository as a template! Just follow the below
+instructions:
 
 1. Click the **Use this template** button at the top of the repository
 1. Select **Create a new repository**
@@ -56,8 +56,8 @@ follow the below instructions:
 
 > [!CAUTION]
 >
-> Make sure to remove or update the [`CODEOWNERS`](./CODEOWNERS) file! For
-> details on how to use this file, see
+> Make sure to remove or update the [`CODEOWNERS`](./CODEOWNERS) file! For details on how to use
+> this file, see
 > [About code owners](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners).
 
 ## Usage
@@ -93,8 +93,7 @@ jobs:
 ```
 
 For example workflow runs, check out the
-[Actions tab](https://github.com/actions/hello-world-javascript-action/actions)!
-🚀
+[Actions tab](https://github.com/actions/hello-world-javascript-action/actions)! 🚀
 
 ## Inputs
 

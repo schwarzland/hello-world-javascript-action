@@ -1,7 +1,5 @@
 name: Wait for Response Action
-description:
-  Checks a URL and expects a response within a defined time and with a defined
-  status.
+description: Checks a URL and expects a response within a defined time and with a defined status.
 author: schwarzland.de
 
 inputs:
@@ -10,8 +8,7 @@ inputs:
     required: true
 
   desired-method:
-    description:
-      Allowed methods are GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS
+    description: Allowed methods are GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS
     required: false
     default: 'GET'
 
@@ -26,22 +23,18 @@ inputs:
     default: '200'
 
   interval:
-    description:
-      The interval (milliseconds) determines how often the URL should be
-      checked.
+    description: The interval (milliseconds) determines how often the URL should be checked.
     required: false
     default: '1000'
 
   timeout:
-    description:
-      The timeout (milliseconds) determines when the check should be aborted.
+    description: The timeout (milliseconds) determines when the check should be aborted.
     required: false
     default: '5000'
 
   abort-at-timeout:
     description:
-      Should the action be aborted on timeout (true), or should it continue
-      running (false)
+      Should the action be aborted on timeout (true), or should it continue running (false)
     required: false
     default: 'true'
 

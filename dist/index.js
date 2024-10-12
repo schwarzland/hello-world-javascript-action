@@ -36782,46 +36782,52 @@ const github = __nccwpck_require__(3228)
 // https://www.npmjs.com/package/node-fetch
 ;
 
-
 class InputParameters {
-    url;
-    desiredMethod;
-    requestHeaders;
-    expectedHttpStatus;
-    interval;
-    timeout;
-    abortAtTimeout;
+  url
+  desiredMethod
+  requestHeaders
+  expectedHttpStatus
+  interval
+  timeout
+  abortAtTimeout
 }
 
+function getInputParameters() {
+  let inputParameters = new InputParameters()
 
-function getInputParameters () {
-    let inputParameters = new InputParameters();
+  inputParameters.url = core.getInput('url', { required: true })
+  //    core.info(`url: ${inputParameters.url}`)
+  inputParameters.desiredMethod = core.getInput('desired-method', {
+    required: true
+  })
+  //    core.info(`desired-method: ${inputParameters.desiredMethod}`)
+  inputParameters.requestHeaders = core.getInput('request-headers', {
+    required: true
+  })
+  //    core.info(`request-headers: ${inputParameters.requestHeaders}`)
+  inputParameters.expectedHttpStatus = core.getInput('expected-http-status', {
+    required: false
+  })
+  //    core.info(`expected-http-status: ${inputParameters.expectedHttpStatus}`)
+  inputParameters.interval = core.getInput('interval', { required: false })
+  //    core.info(`interval: ${inputParameters.interval}`)
+  inputParameters.timeout = core.getInput('timeout', { required: false })
+  //    core.info(`timeout: ${inputParameters.timeout}`)
+  inputParameters.abortAtTimeout = core.getBooleanInput('abort-at-timeout', {
+    required: false
+  })
+  //    core.info(`abort-at-timeout: ${inputParameters.abortAtTimeout}`)
 
-    inputParameters.url = core.getInput('url', { required: true })
-//    core.info(`url: ${inputParameters.url}`)
-    inputParameters.desiredMethod = core.getInput('desired-method', { required: true })
-//    core.info(`desired-method: ${inputParameters.desiredMethod}`)
-    inputParameters.requestHeaders = core.getInput('request-headers', { required: true })
-//    core.info(`request-headers: ${inputParameters.requestHeaders}`)
-    inputParameters.expectedHttpStatus = core.getInput('expected-http-status', { required: false })
-//    core.info(`expected-http-status: ${inputParameters.expectedHttpStatus}`)
-    inputParameters.interval = core.getInput('interval', { required: false })
-//    core.info(`interval: ${inputParameters.interval}`)
-    inputParameters.timeout = core.getInput('timeout', { required: false })
-//    core.info(`timeout: ${inputParameters.timeout}`)
-    inputParameters.abortAtTimeout = core.getBooleanInput('abort-at-timeout', { required: false })
-//    core.info(`abort-at-timeout: ${inputParameters.abortAtTimeout}`)
-
-    core.info ("Input-Parameters: " + JSON.stringify(inputParameters));
-    return inputParameters;
+  core.info('Input-Parameters: ' + JSON.stringify(inputParameters))
+  return inputParameters
 }
 
-function checkStatus (response) {
-    if (response?.status) {
-        core.info("Status: " + response.status + ", " + response.statusText);
-        return response.status;
-    }
-    return null;
+function checkStatus(response) {
+  if (response?.status) {
+    core.info('Status: ' + response.status + ', ' + response.statusText)
+    return response.status
+  }
+  return null
 }
 
 /**
@@ -36830,49 +36836,50 @@ function checkStatus (response) {
  */
 async function run() {
   try {
-    let inputParameters = getInputParameters();
+    let inputParameters = getInputParameters()
 
     // try to get a response
-    let response = null;
-    let status = null;
-    let timeStart = new Date().getTime();
+    let response = null
+    let status = null
+    let timeStart = new Date().getTime()
 
     try {
-        const options = {
-            method: inputParameters.desiredMethod,
-            headers: new Headers(JSON.parse(inputParameters.requestHeaders)),
-            signal: AbortSignal.timeout(parseInt(inputParameters.timeout))
-        }
-        response = await fetch(inputParameters.url, options)
+      const options = {
+        method: inputParameters.desiredMethod,
+        headers: new Headers(JSON.parse(inputParameters.requestHeaders)),
+        signal: AbortSignal.timeout(parseInt(inputParameters.timeout))
+      }
+      response = await fetch(inputParameters.url, options)
 
-        const data = await response.json();
-        core.info("Response JSON: " + JSON.stringify(data));
-        core.setOutput('response', JSON.stringify(data))
-
+      const data = await response.json()
+      core.info('Response JSON: ' + JSON.stringify(data))
+      core.setOutput('response', JSON.stringify(data))
     } catch (error) {
-        core.error ("Error: " + error);
+      core.error('Error: ' + error)
 
-        if (error.name === "TimeoutError") {
-            core.error("Timeout: It took more than 5 seconds to get the result!");
-        } else if (error.name === "AbortError") {
-            core.error("Fetch aborted by user action (browser stop button, closing tab, etc.");
-        } else if (error.name === "TypeError") {
-            core.error("AbortSignal.timeout() method is not supported");
-        } else {
+      if (error.name === 'TimeoutError') {
+        core.error('Timeout: It took more than 5 seconds to get the result!')
+      } else if (error.name === 'AbortError') {
+        core.error('Fetch aborted by user action (browser stop button, closing tab, etc.')
+      } else if (error.name === 'TypeError') {
+        core.error('AbortSignal.timeout() method is not supported')
+      } else {
         // A network error, or some other problem.
-            core.error(`Error: type: ${error.name}, message: ${error.message}`);
-        }
+        core.error(`Error: type: ${error.name}, message: ${error.message}`)
+      }
     }
 
     // Outputs
-    const time = new Date().getTime() - timeStart;
+    const time = new Date().getTime() - timeStart
+    core.info('time: ' + time)
     core.setOutput('time', time)
 
-    const timeoutReached = 'false';
+    const timeoutReached = 'false'
+    core.info('timeout-reached: ', timeoutReached)
     core.setOutput('timeout-reached', timeoutReached)
 
-    const desiredStatus = (checkStatus(response) == inputParameters.expectedHttpStatus ? true : false)
-    core.info ('...desired-status ' + desiredStatus);
+    const desiredStatus = checkStatus(response) == inputParameters.expectedHttpStatus ? true : false
+    core.info('desired-status: ', desiredStatus)
     core.setOutput('desired-status', desiredStatus)
 
     // Output the payload for debugging
@@ -36881,9 +36888,10 @@ async function run() {
     //    )
   } catch (error) {
     // Fail the workflow step if an error occurs
-    core.setFailed("Ups ..." + error.message)
+    core.setFailed('Action error: ' + error.message)
   }
 }
+
 
 /***/ }),
 
