@@ -29,6 +29,16 @@ async function run() {
 
     // try to get a response
 
+    const fetch = require('node-fetch');
+
+    const url = 'https://knifegrinder-backend.schwarz.goip.de/info';
+    const options = {method: 'GET', headers: {Authorization: 'Bearer {{accessToken}}'}};
+
+    const response = await fetch(url, options);
+    const data = await response.json();
+    core.info(data);
+
+
     // Outputs
     const time = new Date().toTimeString()
     core.setOutput('time', time)
@@ -43,9 +53,9 @@ async function run() {
     core.setOutput('response', response)
 
     // Output the payload for debugging
-    core.info(
-      `The event payload: ${JSON.stringify(github.context.payload, null, 2)}`
-    )
+//    core.info(
+//      `The event payload: ${JSON.stringify(github.context.payload, null, 2)}`
+//    )
   } catch (error) {
     // Fail the workflow step if an error occurs
     core.setFailed(error.message)
