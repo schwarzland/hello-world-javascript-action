@@ -45,8 +45,8 @@ outputs:
   timeout-reached:
     description: Boolean, the timeout was reached (true).
 
-  desired-status:
-    description: Boolean, the desired status has been reached (true).
+  httpStatus:
+    description: HTTP-Status
 
   response:
     description: The service's response

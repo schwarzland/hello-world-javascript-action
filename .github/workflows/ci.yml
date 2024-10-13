@@ -68,6 +68,6 @@ jobs:
         run: |
           echo time ${{ steps.waitForResponse.outputs.time }}
           echo timeout-reached ${{ steps.waitForResponse.outputs.timeout-reached }}
-          echo desired-status ${{ steps.waitForResponse.outputs.desired-status }}
+          echo httpStatus ${{ steps.waitForResponse.outputs.httpStatus }}
 
 #          echo response ${{ steps.waitForResponse.outputs.response }}
