@@ -29896,16 +29896,16 @@ function getInputParameters() {
   })
   //    core.info(`abort-at-timeout: ${inputParameters.abortAtTimeout}`)
 
-  core.info('Input-Parameters: ' + JSON.stringify(inputParameters))
+  core.info(`Input-Parameters: ${JSON.stringify(inputParameters)}`)
   return inputParameters
 }
 
 function checkStatus(response) {
   if (response?.status) {
-    core.info('Status: ' + response.status + ', ' + response.statusText)
+    core.info(`Status: ${response.status}, ${response.statusText}`)
     return response.status
   }
-  return null
+  return ''
 }
 
 /**
@@ -29932,7 +29932,7 @@ async function run() {
       const data = await response.json()
       core.setOutput('response', JSON.stringify(data))
     } catch (error) {
-      core.error('Error: ' + error)
+      core.error(`Error: ${error}`)
 
       if (error.name === 'TimeoutError') {
         core.error('Timeout: It took more than 5 seconds to get the result!')
@@ -29942,7 +29942,7 @@ async function run() {
         core.error('AbortSignal.timeout() method is not supported')
       } else {
         // A network error, or some other problem.
-        core.error(`Error: type: ${error.name}, message: ${error.message}`)
+        core.error(`Error: ${error.name}, message: ${error.message}`)
       }
     }
 
@@ -29953,7 +29953,7 @@ async function run() {
     const timeoutReached = 'false'
     core.setOutput('timeout-reached', timeoutReached)
 
-    const httpStatus = checkStatus(response) === inputParameters.expectedHttpStatus ? true : false
+    const httpStatus = checkStatus(response)
     core.info(`httpStatus: ${httpStatus}`)
     core.setOutput('httpStatus', httpStatus)
 
@@ -29963,7 +29963,7 @@ async function run() {
     //    )
   } catch (error) {
     // Fail the workflow step if an error occurs
-    core.setFailed('Action error: ' + error.message)
+    core.setFailed(`Action error: ${error.message}`)
   }
 }
 
