@@ -1,7 +1,10 @@
 // node-fetch from v3 is an ESM-only module - you are not able to import it with require()
 // https://www.npmjs.com/package/node-fetch
 //import fetch from 'node-fetch'
-const fetch = (url, opt) => import('node-fetch').then(({ default: fetch }) => fetch(url, opt))
+//const fetch = (url, opt) => import('node-fetch').then(({ default: fetch }) => fetch(url, opt))
+
+// https://www.npmjs.com/package/node-fetch#providing-global-access
+import './fetch-polyfill'
 
 const core = require('@actions/core')
 const github = require('@actions/github')
