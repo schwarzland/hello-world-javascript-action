@@ -1,11 +1,10 @@
-export { run }
+// node-fetch from v3 is an ESM-only module - you are not able to import it with require()
+// https://www.npmjs.com/package/node-fetch
+//import fetch from 'node-fetch'
+const fetch = (url, opt) => import('node-fetch').then(({ default: fetch }) => fetch(url, opt))
 
 const core = require('@actions/core')
 const github = require('@actions/github')
-
-// node-fetch from v3 is an ESM-only module - you are not able to import it with require()
-// https://www.npmjs.com/package/node-fetch
-import fetch from 'node-fetch'
 
 class InputParameters {
   url
@@ -18,7 +17,7 @@ class InputParameters {
 }
 
 function getInputParameters() {
-  let inputParameters = new InputParameters()
+  const inputParameters = new InputParameters()
 
   inputParameters.url = core.getInput('url', { required: true })
   //    core.info(`url: ${inputParameters.url}`)
@@ -61,12 +60,11 @@ function checkStatus(response) {
  */
 async function run() {
   try {
-    let inputParameters = getInputParameters()
+    const inputParameters = getInputParameters()
 
     // try to get a response
     let response = null
-    let status = null
-    let timeStart = new Date().getTime()
+    const timeStart = new Date().getTime()
 
     try {
       const options = {
@@ -74,6 +72,7 @@ async function run() {
         headers: new Headers(JSON.parse(inputParameters.requestHeaders)),
         signal: AbortSignal.timeout(parseInt(inputParameters.timeout))
       }
+
       response = await fetch(inputParameters.url, options)
 
       const data = await response.json()
@@ -100,7 +99,8 @@ async function run() {
     const timeoutReached = 'false'
     core.setOutput('timeout-reached', timeoutReached)
 
-    const desiredStatus = checkStatus(response) == inputParameters.expectedHttpStatus ? true : false
+    const desiredStatus =
+      checkStatus(response) === inputParameters.expectedHttpStatus ? true : false
     core.info('desired-status: ' + desiredStatus)
     core.setOutput('desired-status', desiredStatus)
 
@@ -113,3 +113,5 @@ async function run() {
     core.setFailed('Action error: ' + error.message)
   }
 }
+
+export { run }
