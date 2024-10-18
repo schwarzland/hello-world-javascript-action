@@ -30014,7 +30014,7 @@ async function run() {
                 break
             }
 
-            core.info('warten ...')
+            core.info('warten 1 Sekunde...')
             await delay(1000)
             core.info('warten fertig')
 
