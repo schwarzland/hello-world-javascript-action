@@ -76,8 +76,8 @@ jobs:
           headers: ${{ inputs.headers }}
           http-status: ${{ inputs.http-status }}
           timeout: ${{ inputs.timeout }}
-#          interval: ${{ inputs.interval }}
-#          abort-at-timeout: ${{ inputs.abort-at-timeout }}
+      #          interval: ${{ inputs.interval }}
+      #          abort-at-timeout: ${{ inputs.abort-at-timeout }}
 
       - name: Print Output
         id: output

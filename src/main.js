@@ -1,17 +1,15 @@
 const core = require('@actions/core')
 const github = require('@actions/github')
 
-
 class InputParameters {
-  url;
-  method;
-  headers;
-  httpStatus;
-  timeout;
-//  interval
-//  abortAtTimeout
+  url
+  method
+  headers
+  httpStatus
+  timeout
+  //  interval
+  //  abortAtTimeout
 }
-
 
 function getInputParameters() {
   const inputParameters = new InputParameters()
@@ -37,17 +35,16 @@ function getInputParameters() {
   inputParameters.timeout = core.getInput('timeout', { required: false })
   core.info(`timeout: ${inputParameters.timeout}`)
 
-//  inputParameters.interval = core.getInput('interval', { required: false })
+  //  inputParameters.interval = core.getInput('interval', { required: false })
   //    core.info(`interval: ${inputParameters.interval}`)
-//  inputParameters.abortAtTimeout = core.getBooleanInput('abort-at-timeout', {
-//    required: false
-//  })
+  //  inputParameters.abortAtTimeout = core.getBooleanInput('abort-at-timeout', {
+  //    required: false
+  //  })
   //    core.info(`abort-at-timeout: ${inputParameters.abortAtTimeout}`)
 
   core.info(`Input-Parameters: ${JSON.stringify(inputParameters)}`)
   return inputParameters
 }
-
 
 function checkStatus(response) {
   if (response?.status) {
@@ -56,7 +53,6 @@ function checkStatus(response) {
   }
   return ''
 }
-
 
 /**
  * The main function for the action.
@@ -81,11 +77,11 @@ async function run() {
 
       const data = await response
       core.setOutput('response', data)
-
     } catch (error) {
-
       if (error.name === 'TimeoutError') {
-        core.error(`Timeout: It took more than ${inputParameters.timeout} milliseconds to get the result!`)
+        core.error(
+          `Timeout: It took more than ${inputParameters.timeout} milliseconds to get the result!`
+        )
       } else if (error.name === 'AbortError') {
         core.error('Fetch aborted by user action (browser stop button, closing tab, etc.')
       } else if (error.name === 'TypeError') {
@@ -104,15 +100,13 @@ async function run() {
     core.info(`httpStatus: ${httpStatus}`)
     core.setOutput('http-status', httpStatus)
 
-
-//    const timeoutReached = 'false'
-//    core.setOutput('timeout-reached', timeoutReached)
+    //    const timeoutReached = 'false'
+    //    core.setOutput('timeout-reached', timeoutReached)
 
     // Output the payload for debugging
     //    core.info(
     //      `The event payload: ${JSON.stringify(github.context.payload, null, 2)}`
     //    )
-
   } catch (error) {
     // Fail the workflow step if an error occurs
     core.setFailed(`Action error: ${error.message}`)

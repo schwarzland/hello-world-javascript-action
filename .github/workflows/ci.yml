@@ -60,8 +60,8 @@ jobs:
           headers: '{ "accept":"application/json" }'
           http-status: '200'
           timeout: '5000'
-#          interval: '1000'
-#          abort-at-timeout: 'false'
+      #          interval: '1000'
+      #          abort-at-timeout: 'false'
 
       - name: Print Output
         id: output
@@ -69,4 +69,3 @@ jobs:
           echo time=${{ steps.waitForResponse.outputs.time }}
           echo httpStatus=${{ steps.waitForResponse.outputs.http-status }}
           echo response=${{ steps.waitForResponse.outputs.response }}
-
