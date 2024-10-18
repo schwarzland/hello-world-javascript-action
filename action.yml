@@ -45,6 +45,20 @@ inputs:
         required: false
         default: '5000'
 
+    single-fetch-timeout:
+        description:
+            The timeout (milliseconds) determines when the single fetch should
+            be aborted.
+        required: false
+        default: '1000'
+
+    waiting-time:
+        description:
+            The waiting time (milliseconds) after a fetch if the desired status
+            has not yet been reached
+        required: false
+        default: '1000'
+
 outputs:
     duration:
         description: The time it took to complete the request.

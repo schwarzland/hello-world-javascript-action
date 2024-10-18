@@ -29868,6 +29868,8 @@ class InputParameters {
     bodyReadingMethod
     httpStatus
     timeout
+    singleFetchTimeout
+    waitingTime
 }
 
 function getInputParameters() {
@@ -29900,13 +29902,35 @@ function getInputParameters() {
     })
     core.info(`body-reading-method: ${inputParameters.bodyReadingMethod}`)
 
-    inputParameters.httpStatus = core.getInput('http-status', {
-        required: false
-    })
+    inputParameters.httpStatus = parseInt(
+        core.getInput('http-status', {
+            required: false
+        })
+    )
     core.info(`http-status: ${inputParameters.httpStatus}`)
 
-    inputParameters.timeout = core.getInput('timeout', { required: false })
+    inputParameters.timeout = parseInt(
+        core.getInput('timeout', { required: false })
+    )
     core.info(`timeout: ${inputParameters.timeout}`)
+
+    inputParameters.singleFetchTimeout = parseInt(
+        core.getInput('single-fetch-timeout', { required: false })
+    )
+    if (inputParameters.singleFetchTimeout < 100) {
+        core.warning('single-fetch-timeout < 100 ms, new timeout = 200 ms')
+        inputParameters.singleFetchTimeout = 200
+    }
+    core.info(`single-fetch-timeout: ${inputParameters.singleFetchTimeout}`)
+
+    inputParameters.waitingTime = parseInt(
+        core.getInput('waiting-time', { required: false })
+    )
+    if (inputParameters.waitingTime < 100) {
+        core.warning('waiting-time < 100 ms, new timeout = 200 ms')
+        inputParameters.waitingTime = 200
+    }
+    core.info(`waiting-time: ${inputParameters.waitingTime}`)
 
     return inputParameters
 }
@@ -29914,21 +29938,15 @@ function getInputParameters() {
 function checkStatus(response) {
     if (response?.status) {
         core.info(`Status: ${response.status}, ${response.statusText}`)
-        return response.status
+        return parseInt(response.status)
     }
-    return ''
+    return null
 }
 
 function getOptions(inputParameters) {
-    inputParameters.timeout = parseInt(inputParameters.timeout)
-    if (inputParameters.timeout < 200) {
-        core.warning('timeout < 200 ms, new timeout = 400 ms')
-        inputParameters.timeout = 400
-    }
-
     let options = {
         method: inputParameters.method,
-        signal: AbortSignal.timeout(parseInt(inputParameters.timeout))
+        signal: AbortSignal.timeout(inputParameters.singleFetchTimeout)
     }
 
     if (inputParameters.headers != '') {
@@ -29953,12 +29971,12 @@ async function tryFetch(inputParameters) {
             case 'JSON':
                 data = await response.json()
                 core.setOutput('response', JSON.stringify(data))
-                core.info(`response json: ${JSON.stringify(data)}`)
+                //                core.info(`response json: ${JSON.stringify(data)}`)
                 break
             case 'TEXT':
                 data = await response.text()
                 core.setOutput('response', data)
-                core.info(`response text: ${data}`)
+                //                core.info(`response text: ${data}`)
                 break
             default:
                 core.error('body-reading-method unknown')
@@ -29966,7 +29984,7 @@ async function tryFetch(inputParameters) {
     } catch (error) {
         if (error.name === 'TimeoutError') {
             core.error(
-                `Timeout: It took more than ${inputParameters.timeout} milliseconds to get the result!`
+                `Timeout: It took more than ${inputParameters.singleFetchTimeout} milliseconds to get the result!`
             )
         } else if (error.name === 'AbortError') {
             core.error(
@@ -30004,24 +30022,24 @@ async function run() {
             core.info(`maxLoop: ${maxLoop}`)
             httpStatus = await tryFetch(inputParameters)
 
-            if (parseInt(httpStatus) === parseInt(inputParameters.httpStatus)) {
-                core.info('http-status erreicht')
+            if (httpStatus === inputParameters.httpStatus) {
+                core.info(`desired http-status achieved: ${httpStatus}`)
                 break
             }
 
             const time = new Date().getTime() - timeStart
-            if (time > 5000) {
-                core.error('Zeit abgelaufen')
+            if (time > inputParameters.timeout) {
+                core.error(`timeout reached: ${time} ms`)
                 break
             }
 
-            core.info('warten 1 Sekunde...')
-            await delay(1000)
-            core.info('warten fertig')
+            core.info(`start waiting ${inputParameters.waitingTime} ms`)
+            await delay(inputParameters.waitingTime)
+            core.info('waiting completed')
 
             maxLoop--
         } while (maxLoop > 0)
-        core.info('Schleife beendet ...')
+        core.info('loop ended')
 
         core.setOutput('http-status', httpStatus)
 

@@ -60,6 +60,20 @@ on:
                 default: '5000'
                 type: string
 
+            single-fetch-timeout:
+                description:
+                    The timeout (milliseconds) determines when the single fetch
+                    should be aborted.
+                required: false
+                default: '1000'
+
+            waiting-time:
+                description:
+                    The waiting time (milliseconds) after a fetch if the desired
+                    status has not yet been reached
+                required: false
+                default: '1000'
+
 permissions:
     actions: read
     contents: read
@@ -84,6 +98,8 @@ jobs:
                   body-reading-method: ${{ inputs.body-reading-method }}
                   http-status: ${{ inputs.http-status }}
                   timeout: ${{ inputs.timeout }}
+                  single-fetch-timeout: ${{ inputs.single-fetch-timeout }}
+                  waiting-time: ${{ inputs.waiting-time }}
 
             - name: Print Output
               id: output
