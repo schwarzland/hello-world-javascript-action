@@ -59,7 +59,7 @@ jobs:
           method: 'GET'
           headers: '{ "accept":"application/json" }'
           body: ''
-          body-reading-method: JSON
+          body-reading-method: 'JSON'
           http-status: '200'
           timeout: '5000'
 

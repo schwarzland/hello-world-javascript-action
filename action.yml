@@ -5,8 +5,8 @@ author: schwarzland.de
 inputs:
   url:
     description: The URL to be checked
-    default: 'https://www.google.com'
     required: true
+    default: 'https://www.google.com'
 
   method:
     description: Allowed methods are GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS

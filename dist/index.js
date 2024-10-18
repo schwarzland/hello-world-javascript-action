@@ -29877,24 +29877,24 @@ function getInputParameters() {
   core.info(`url: ${inputParameters.url}`)
 
   inputParameters.method = core.getInput('method', {
-    required: true
+    required: false
   })
   core.info(`method: ${inputParameters.method}`)
 
   inputParameters.headers = core.getInput('headers', {
-    required: true
-  })
-  core.info(`headers: ${inputParameters.headers}`)
-
-  inputParameters.body = core.getInput('body-reading-method', {
     required: false
   })
-  core.info(`body-reading-method: ${inputParameters.bodyReadingMethod}`)
+  core.info(`headers: ${inputParameters.headers}`)
 
   inputParameters.body = core.getInput('body', {
     required: false
   })
   core.info(`body: ${inputParameters.body}`)
+
+  inputParameters.bodyReadingMethod = core.getInput('body-reading-method', {
+    required: false
+  })
+  core.info(`body-reading-method: ${inputParameters.bodyReadingMethod}`)
 
   inputParameters.httpStatus = core.getInput('http-status', {
     required: false
