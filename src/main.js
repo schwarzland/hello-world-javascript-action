@@ -72,8 +72,8 @@ async function run() {
       const options = {
         method: inputParameters.method,
         headers: new Headers(JSON.parse(inputParameters.headers)),
-        body: inputParameters.body,
-        signal: AbortSignal.timeout(parseInt(inputParameters.timeout))
+        signal: AbortSignal.timeout(parseInt(inputParameters.timeout)),
+        body: inputParameters.body
       }
       response = await fetch(inputParameters.url, options)
 
