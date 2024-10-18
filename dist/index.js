@@ -29983,15 +29983,19 @@ async function tryFetch(inputParameters) {
             core.error(
                 `Timeout: It took more than ${inputParameters.singleFetchTimeout} milliseconds to get the result!`
             )
+            return 'Error'
         } else if (error.name === 'AbortError') {
             core.error(
                 'Fetch aborted by user action (browser stop button, closing tab, etc.'
             )
+            return 'Error'
         } else if (error.name === 'TypeError') {
             core.error('AbortSignal.timeout() method is not supported')
+            return 'Error'
         } else {
             // A network error, or some other problem.
             core.error(`Error: ${error.name}, ${error.message}`)
+            return 'Error'
         }
     }
 
@@ -30020,17 +30024,19 @@ async function run() {
             core.info(`--- maxLoop: ${maxLoop}`)
             httpStatus = await tryFetch(inputParameters)
 
-            if (httpStatus === inputParameters.httpStatus) {
-                core.info(`desired http-status achieved: ${httpStatus}`)
-                core.setOutput('result', 'ok')
-                break
-            }
+            if (httpStatus !== 'Error') {
+                if (httpStatus === inputParameters.httpStatus) {
+                    core.info(`desired http-status achieved: ${httpStatus}`)
+                    core.setOutput('result', 'ok')
+                    break
+                }
 
-            const time = new Date().getTime() - timeStart
-            if (time > inputParameters.timeout) {
-                core.error(`timeout reached: ${time} ms`)
-                core.setOutput('result', 'timeout')
-                break
+                const time = new Date().getTime() - timeStart
+                if (time > inputParameters.timeout) {
+                    core.error(`timeout reached: ${time} ms`)
+                    core.setOutput('result', 'timeout')
+                    break
+                }
             }
 
             core.info(`start waiting ${inputParameters.waitingTime} ms`)
