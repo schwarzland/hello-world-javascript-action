@@ -30017,7 +30017,7 @@ async function run() {
 
         let maxLoop = 100
         do {
-            core.info(`maxLoop: ${maxLoop}`)
+            core.info(`--- maxLoop: ${maxLoop}`)
             httpStatus = await tryFetch(inputParameters)
 
             if (httpStatus === inputParameters.httpStatus) {
@@ -30033,17 +30033,18 @@ async function run() {
 
             core.info(`start waiting ${inputParameters.waitingTime} ms`)
             await delay(inputParameters.waitingTime)
-            core.info('waiting completed')
+            core.info(`waiting completed`)
 
             maxLoop--
         } while (maxLoop > 0)
-        core.info('loop ended')
+        core.info('--- loop ended')
 
         core.setOutput('http-status', httpStatus)
 
         // Outputs
         const duration = new Date().getTime() - timeStart
         core.setOutput('duration', duration)
+        core.info(`duration: ${duration} ms`)
 
         // Output the payload for debugging
         //    core.info(

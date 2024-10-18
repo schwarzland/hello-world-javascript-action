@@ -69,7 +69,7 @@ jobs:
               run: |
                   echo duration=${{ steps.waitForResponse1.outputs.duration }}
                   echo actual http-status=${{ steps.waitForResponse1.outputs.http-status }}
-                  echo response=${{ toJSON(steps.waitForResponse.outputs1.response) }}
+                  echo response=${{ toJSON(steps.waitForResponse1.outputs.response) }}
 
             - name: Test local action 'Wait for Response' with Telekom
               id: waitForResponse2
@@ -82,4 +82,4 @@ jobs:
               run: |
                   echo duration=${{ steps.waitForResponse2.outputs.duration }}
                   echo actual http-status=${{ steps.waitForResponse2.outputs.http-status }}
-                  echo response=${{ toJSON(steps.waitForResponse.outputs2.response) }}
+                  echo response=${{ toJSON(steps.waitForResponse2.outputs.response) }}
