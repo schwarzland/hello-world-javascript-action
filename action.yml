@@ -1,54 +1,60 @@
 name: Wait for Response Action
-description: Checks a URL and expects a response within a defined time and with a defined status.
+description:
+    Checks a URL and expects a response within a defined time and with a defined
+    status.
 author: schwarzland.de
 
 inputs:
-  url:
-    description: The URL to be checked
-    required: true
-    default: 'https://www.google.com'
+    url:
+        description: The URL to be checked
+        required: true
+        default: 'https://www.google.com'
 
-  method:
-    description: Allowed methods are GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS
-    required: false
-    default: 'GET'
+    method:
+        description:
+            Allowed methods are GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS
+        required: false
+        default: 'GET'
 
-  headers:
-    description: Request Headers in JSON-Format
-    required: false
-    default: ''
+    headers:
+        description: Request Headers in JSON-Format
+        required: false
+        default: ''
 
-  body:
-    description: Body of the Request
-    required: false
-    default: ''
+    body:
+        description: Body of the Request
+        required: false
+        default: ''
 
-  body-reading-method:
-    description:
-      Specifies how the response body should be interpreted. Possible values are json, text
-    required: false
-    default: 'JSON'
+    body-reading-method:
+        description:
+            Specifies how the response body should be interpreted. Possible
+            values are json, text
+        required: false
+        default: 'JSON'
 
-  http-status:
-    description: The expected http status
-    required: false
-    default: '200'
+    http-status:
+        description: The expected http status
+        required: false
+        default: '200'
 
-  timeout:
-    description: The timeout (milliseconds) determines when the check should be aborted.
-    required: false
-    default: '5000'
+    timeout:
+        description:
+            The timeout (milliseconds) determines when the check should be
+            aborted.
+        required: false
+        default: '5000'
 
 outputs:
-  time:
-    description: The time it took to complete the request.
+    time:
+        description: The time it took to complete the request.
 
-  http-status:
-    description: HTTP-Status
+    http-status:
+        description: HTTP-Status
 
-  response:
-    description: The service's response
+    response:
+        description: The service's response
 
 runs:
-  using: node20
-  main: dist/index.js
+    using: node20
+    main: dist/index.js

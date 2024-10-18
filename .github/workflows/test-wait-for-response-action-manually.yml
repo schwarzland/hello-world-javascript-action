@@ -1,87 +1,92 @@
 name: Example Workflow
 
 on:
-  workflow_dispatch:
-    inputs:
-      url:
-        description: The URL to be checked
-        required: true
-        default: 'https://api.sampleapis.com/futurama/info'
-        type: string
+    workflow_dispatch:
+        inputs:
+            url:
+                description: The URL to be checked
+                required: true
+                default: 'https://api.sampleapis.com/futurama/info'
+                type: string
 
-      method:
-        description: Allowed methods are GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS
-        required: true
-        default: 'GET'
-        type: string
-        options:
-          - GET
-          - POST
-          - PUT
-          - PATCH
-          - DELETE
-          - HEAD
-          - OPTIONS
+            method:
+                description:
+                    Allowed methods are GET, POST, PUT, PATCH, DELETE, HEAD,
+                    OPTIONS
+                required: true
+                default: 'GET'
+                type: string
+                options:
+                    - GET
+                    - POST
+                    - PUT
+                    - PATCH
+                    - DELETE
+                    - HEAD
+                    - OPTIONS
 
-      headers:
-        description: Request Headers in JSON-Format
-        required: false
-        default: '{ "accept":"application/json" }'
-        type: string
+            headers:
+                description: Request Headers in JSON-Format
+                required: false
+                default: '{ "accept":"application/json" }'
+                type: string
 
-      body:
-        description: Body of the Request
-        required: false
-        default: ''
+            body:
+                description: Body of the Request
+                required: false
+                default: ''
 
-      body-reading-method:
-        description:
-          Specifies how the response body should be interpreted. Possible values are JSON, TEXT
-        required: false
-        options:
-          - JSON
-          - TEXT
+            body-reading-method:
+                description:
+                    Specifies how the response body should be interpreted.
+                    Possible values are JSON, TEXT
+                required: false
+                options:
+                    - JSON
+                    - TEXT
 
-      http-status:
-        description: The expected http status
-        required: false
-        default: '200'
-        type: string
+            http-status:
+                description: The expected http status
+                required: false
+                default: '200'
+                type: string
 
-      timeout:
-        description: The timeout (milliseconds) determines when the check should be aborted.
-        required: false
-        default: '5000'
-        type: string
+            timeout:
+                description:
+                    The timeout (milliseconds) determines when the check should
+                    be aborted.
+                required: false
+                default: '5000'
+                type: string
 
 permissions:
-  actions: read
-  contents: read
+    actions: read
+    contents: read
 
 jobs:
-  wait-for-response-test:
-    name: Tests the Wait-For-Response-Action manually
-    runs-on: ubuntu-latest
+    wait-for-response-test:
+        name: Tests the Wait-For-Response-Action manually
+        runs-on: ubuntu-latest
 
-    steps:
-      # Change @main to a specific commit SHA or version tag, e.g.:
-      # actions/hello-world-javascript-action@e76147da8e5c81eaf017dede5645551d4b94427b
-      # actions/hello-world-javascript-action@v1.2.3
-      - name: Test Wait for Response
-        id: waitForResponse
-        uses: schwarzland/wait-for-response-action@main
-        with:
-          url: ${{ inputs.url }}
-          method: ${{ inputs.method }}
-          headers: ${{ inputs.headers }}
-          body: ${{ inputs.body }}
-          body-reading-method: ${{ inputs.body-reading-method }}
-          http-status: ${{ inputs.http-status }}
-          timeout: ${{ inputs.timeout }}
+        steps:
+            # Change @main to a specific commit SHA or version tag, e.g.:
+            # actions/hello-world-javascript-action@e76147da8e5c81eaf017dede5645551d4b94427b
+            # actions/hello-world-javascript-action@v1.2.3
+            - name: Test Wait for Response
+              id: waitForResponse
+              uses: schwarzland/wait-for-response-action@main
+              with:
+                  url: ${{ inputs.url }}
+                  method: ${{ inputs.method }}
+                  headers: ${{ inputs.headers }}
+                  body: ${{ inputs.body }}
+                  body-reading-method: ${{ inputs.body-reading-method }}
+                  http-status: ${{ inputs.http-status }}
+                  timeout: ${{ inputs.timeout }}
 
-      - name: Print Output
-        id: output
-        run: |
-          echo time=${{ steps.waitForResponse.outputs.time }}
-          echo httpStatus=${{ steps.waitForResponse.outputs.http-status }}
-          echo response=${{ steps.waitForResponse.outputs.response }}
+            - name: Print Output
+              id: output
+              run: |
+                  echo time=${{ steps.waitForResponse.outputs.time }}
+                  echo httpStatus=${{ steps.waitForResponse.outputs.http-status }}
+                  echo response=${{ steps.waitForResponse.outputs.response }}
