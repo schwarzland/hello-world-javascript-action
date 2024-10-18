@@ -18,6 +18,17 @@ inputs:
     required: false
     default: ''
 
+  body:
+    description: Body of the Request
+    required: false
+    default: ''
+
+  body-reading-method:
+    description:
+      Specifies how the response body should be interpreted. Possible values are json, text
+    required: false
+    default: 'JSON'
+
   http-status:
     description: The expected http status
     required: false
@@ -28,17 +39,6 @@ inputs:
     required: false
     default: '5000'
 
-#  interval:
-#    description: The interval (milliseconds) determines how often the URL should be checked.
-#    required: false
-#    default: '1000'
-
-#  abort-at-timeout:
-#    description:
-#      Should the action be aborted on timeout (true), or should it continue running (false)
-#    required: false
-#    default: 'true'
-
 outputs:
   time:
     description: The time it took to complete the request.
@@ -48,9 +48,6 @@ outputs:
 
   response:
     description: The service's response
-
-#  timeout-reached:
-#    description: Boolean, the timeout was reached (true).
 
 runs:
   using: node20

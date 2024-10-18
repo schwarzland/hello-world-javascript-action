@@ -5,10 +5,10 @@ class InputParameters {
   url
   method
   headers
+  body
+  bodyReadingMethod
   httpStatus
   timeout
-  //  interval
-  //  abortAtTimeout
 }
 
 function getInputParameters() {
@@ -27,6 +27,16 @@ function getInputParameters() {
   })
   core.info(`headers: ${inputParameters.headers}`)
 
+  inputParameters.body = core.getInput('body-reading-method', {
+    required: false
+  })
+  core.info(`body-reading-method: ${inputParameters.bodyReadingMethod}`)
+
+  inputParameters.body = core.getInput('body', {
+    required: false
+  })
+  core.info(`body: ${inputParameters.body}`)
+
   inputParameters.httpStatus = core.getInput('http-status', {
     required: false
   })
@@ -35,14 +45,6 @@ function getInputParameters() {
   inputParameters.timeout = core.getInput('timeout', { required: false })
   core.info(`timeout: ${inputParameters.timeout}`)
 
-  //  inputParameters.interval = core.getInput('interval', { required: false })
-  //    core.info(`interval: ${inputParameters.interval}`)
-  //  inputParameters.abortAtTimeout = core.getBooleanInput('abort-at-timeout', {
-  //    required: false
-  //  })
-  //    core.info(`abort-at-timeout: ${inputParameters.abortAtTimeout}`)
-
-  core.info(`Input-Parameters: ${JSON.stringify(inputParameters)}`)
   return inputParameters
 }
 
@@ -70,12 +72,23 @@ async function run() {
       const options = {
         method: inputParameters.method,
         headers: new Headers(JSON.parse(inputParameters.headers)),
+        body: inputParameters.body,
         signal: AbortSignal.timeout(parseInt(inputParameters.timeout))
       }
-
       response = await fetch(inputParameters.url, options)
 
-      const data = await response.text()
+      let data = null
+      switch (inputParameters.bodyReadingMethod) {
+        case 'JSON':
+          data = await response.json()
+          break
+        case 'TEXT':
+          data = await response.text()
+          break
+        default:
+          data = await response.json()
+      }
+
       core.setOutput('response', data)
       core.info(`response: ${data}`)
     } catch (error) {
@@ -99,9 +112,6 @@ async function run() {
 
     const httpStatus = checkStatus(response)
     core.setOutput('http-status', httpStatus)
-
-    //    const timeoutReached = 'false'
-    //    core.setOutput('timeout-reached', timeoutReached)
 
     // Output the payload for debugging
     //    core.info(

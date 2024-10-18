@@ -29,6 +29,19 @@ on:
         default: '{ "accept":"application/json" }'
         type: string
 
+      body:
+        description: Body of the Request
+        required: false
+        default: ''
+
+      body-reading-method:
+        description:
+          Specifies how the response body should be interpreted. Possible values are JSON, TEXT
+        required: false
+        options:
+          - JSON
+          - TEXT
+
       http-status:
         description: The expected http status
         required: false
@@ -40,19 +53,6 @@ on:
         required: false
         default: '5000'
         type: string
-
-#      interval:
-#        description: The interval (milliseconds) determines how often the URL should be checked.
-#        required: false
-#        default: '1000'
-#        type: string
-
-#      abort-at-timeout:
-#        description:
-#          Should the action be aborted on timeout (true), or should it continue running (false)
-#        required: false
-#        default: true
-#        type: boolean
 
 permissions:
   actions: read
@@ -74,10 +74,10 @@ jobs:
           url: ${{ inputs.url }}
           method: ${{ inputs.method }}
           headers: ${{ inputs.headers }}
+          body: ${{ inputs.body }}
+          body-reading-method: ${{ inputs.body-reading-method }}
           http-status: ${{ inputs.http-status }}
           timeout: ${{ inputs.timeout }}
-      #          interval: ${{ inputs.interval }}
-      #          abort-at-timeout: ${{ inputs.abort-at-timeout }}
 
       - name: Print Output
         id: output
