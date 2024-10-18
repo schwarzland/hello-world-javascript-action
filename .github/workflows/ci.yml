@@ -61,7 +61,7 @@ jobs:
                   body: ''
                   body-reading-method: 'JSON'
                   http-status: '200'
-                  timeout: '200'
+                  timeout: '1000'
 
             - name: Print Output
               id: output

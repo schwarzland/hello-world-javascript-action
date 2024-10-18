@@ -25,12 +25,16 @@ function getInputParameters() {
     inputParameters.headers = core.getInput('headers', {
         required: false
     })
-    core.info(`headers: ${inputParameters.headers}`)
+    if (inputParameters.headers != '') {
+        core.info(`headers: ${inputParameters.headers}`)
+    }
 
     inputParameters.body = core.getInput('body', {
         required: false
     })
-    core.info(`body: ${inputParameters.body}`)
+    if (inputParameters.body != '') {
+        core.info(`body: ${inputParameters.body}`)
+    }
 
     inputParameters.bodyReadingMethod = core.getInput('body-reading-method', {
         required: false
@@ -140,7 +144,7 @@ async function run() {
         do {
             httpStatus = tryFetch(inputParameters)
 
-            if (httpStatus === inputParameters.httpStatus) {
+            if (parseInt(httpStatus) === parseInt(inputParameters.httpStatus)) {
                 core.info('http-status erreicht')
                 break
             }
@@ -151,7 +155,7 @@ async function run() {
                 break
             }
 
-            core.info('warten ...')
+            core.info('warten 1 Sekunde...')
             await delay(1000)
             core.info('warten fertig')
 
