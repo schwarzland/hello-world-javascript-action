@@ -40,22 +40,22 @@ inputs:
 
     timeout:
         description:
-            The timeout (milliseconds) determines when the check should be
-            aborted.
+            The timeout (at least 500 milliseconds) determines when the entire
+            query should be aborted..
         required: false
         default: '5000'
 
     single-fetch-timeout:
         description:
-            The timeout (milliseconds) determines when the single fetch should
-            be aborted.
+            The timeout (at least 200 milliseconds) determines when the single
+            fetch should be aborted.
         required: false
         default: '1000'
 
     waiting-time:
         description:
-            The waiting time (milliseconds) after a fetch if the desired status
-            has not yet been reached
+            The waiting time (at least 200 milliseconds) after a fetch if the
+            desired status has not yet been reached.
         required: false
         default: '1000'
 

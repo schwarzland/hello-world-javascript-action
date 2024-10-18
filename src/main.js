@@ -53,13 +53,17 @@ function getInputParameters() {
     inputParameters.timeout = parseInt(
         core.getInput('timeout', { required: false })
     )
+    if (inputParameters.timeout < 500) {
+        core.warning('timeout < 500 ms, new timeout = 500 ms')
+        inputParameters.timeout = 500
+    }
     core.info(`timeout: ${inputParameters.timeout}`)
 
     inputParameters.singleFetchTimeout = parseInt(
         core.getInput('single-fetch-timeout', { required: false })
     )
-    if (inputParameters.singleFetchTimeout < 100) {
-        core.warning('single-fetch-timeout < 100 ms, new timeout = 200 ms')
+    if (inputParameters.singleFetchTimeout < 200) {
+        core.warning('single-fetch-timeout < 200 ms, new timeout = 200 ms')
         inputParameters.singleFetchTimeout = 200
     }
     core.info(`single-fetch-timeout: ${inputParameters.singleFetchTimeout}`)
@@ -67,8 +71,8 @@ function getInputParameters() {
     inputParameters.waitingTime = parseInt(
         core.getInput('waiting-time', { required: false })
     )
-    if (inputParameters.waitingTime < 100) {
-        core.warning('waiting-time < 100 ms, new timeout = 200 ms')
+    if (inputParameters.waitingTime < 200) {
+        core.warning('waiting-time < 200 ms, new timeout = 200 ms')
         inputParameters.waitingTime = 200
     }
     core.info(`waiting-time: ${inputParameters.waitingTime}`)

@@ -71,3 +71,24 @@ jobs:
                   echo duration=${{ steps.waitForResponse.outputs.duration }}
                   echo actual http-status=${{ steps.waitForResponse.outputs.http-status }}
                   echo response=${{ toJSON(steps.waitForResponse.outputs.response) }}
+
+            - name: Test local action 'Wait for Response' with Telekom
+              id: waitForResponse
+              uses: schwarzland/wait-for-response-action@main
+              with:
+                  url: 'https://www.telekom.de'
+                  method: 'GET'
+                  headers: '{ "accept":"text/HTML" }'
+                  body: ''
+                  body-reading-method: 'TEXT'
+                  http-status: '200'
+                  timeout: '5000'
+                  single-fetch-timeout: '1000'
+                  waiting-time: '1000'
+
+            - name: Print Output
+              id: output
+              run: |
+                  echo duration=${{ steps.waitForResponse.outputs.duration }}
+                  echo actual http-status=${{ steps.waitForResponse.outputs.http-status }}
+                  echo response=${{ toJSON(steps.waitForResponse.outputs.response) }}
