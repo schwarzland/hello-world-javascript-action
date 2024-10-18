@@ -27,14 +27,14 @@ function getInputParameters() {
     inputParameters.headers = core.getInput('headers', {
         required: false
     })
-    if (inputParameters.headers != '') {
+    if (inputParameters.headers !== '') {
         core.info(`headers: ${inputParameters.headers}`)
     }
 
     inputParameters.body = core.getInput('body', {
         required: false
     })
-    if (inputParameters.body != '') {
+    if (inputParameters.body !== '') {
         core.info(`body: ${inputParameters.body}`)
     }
 
@@ -85,16 +85,16 @@ function checkStatus(response) {
 }
 
 function getOptions(inputParameters) {
-    let options = {
+    const options = {
         method: inputParameters.method,
         signal: AbortSignal.timeout(inputParameters.singleFetchTimeout)
     }
 
-    if (inputParameters.headers != '') {
+    if (inputParameters.headers !== '') {
         options.headers = new Headers(JSON.parse(inputParameters.headers))
     }
 
-    if (inputParameters.body != '') {
+    if (inputParameters.body !== '') {
         options.body = inputParameters.body
     }
 
@@ -111,7 +111,7 @@ async function tryFetch(inputParameters) {
         switch (inputParameters.bodyReadingMethod) {
             case 'JSON':
                 data = await response.json()
-                core.setOutput('response', `${JSON.stringify(data)}`)
+                core.setOutput('response', data)
                 //                core.info(`response json: ${JSON.stringify(data)}`)
                 break
             case 'TEXT':

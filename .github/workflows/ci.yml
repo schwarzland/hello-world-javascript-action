@@ -70,4 +70,4 @@ jobs:
               run: |
                   echo duration=${{ steps.waitForResponse.outputs.duration }}
                   echo actual http-status=${{ steps.waitForResponse.outputs.http-status }}
-                  echo response=${{ steps.waitForResponse.outputs.response }}
+                  echo response=${{ fromJSON(steps.waitForResponse.outputs.response) }}
