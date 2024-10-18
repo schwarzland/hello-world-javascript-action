@@ -3,13 +3,13 @@ const github = require('@actions/github')
 
 
 class InputParameters {
-  url
-  desiredMethod
-  requestHeaders
-  expectedHttpStatus
-  interval
-  timeout
-  abortAtTimeout
+  url;
+  method;
+  headers;
+  httpStatus;
+  timeout;
+//  interval
+//  abortAtTimeout
 }
 
 
