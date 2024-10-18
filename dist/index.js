@@ -30030,13 +30030,13 @@ async function run() {
                     core.setOutput('result', 'ok')
                     break
                 }
+            }
 
-                const time = new Date().getTime() - timeStart
-                if (time > inputParameters.timeout) {
-                    core.error(`timeout reached: ${time} ms`)
-                    core.setOutput('result', 'timeout')
-                    break
-                }
+            const time = new Date().getTime() - timeStart
+            if (time > inputParameters.timeout) {
+                core.error(`timeout reached: ${time} ms`)
+                core.setOutput('result', 'timeout')
+                break
             }
 
             core.info(`start waiting ${inputParameters.waitingTime} ms`)
