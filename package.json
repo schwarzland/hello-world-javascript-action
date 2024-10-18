@@ -66,6 +66,7 @@
     "dependencies": {
         "@actions/core": "^1.11.1",
         "@actions/github": "^6.0.0",
+        "html-to-text": "^9.0.5",
         "node-fetch": "^3.3.2"
     },
     "devDependencies": {

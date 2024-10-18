@@ -1,6 +1,13 @@
 const core = require('@actions/core')
 const github = require('@actions/github')
 
+//https://www.npmjs.com/package/html-to-text
+const { convert } = require('html-to-text')
+const options = {
+    wordwrap: 130
+    // ...
+}
+
 class InputParameters {
     url
     method
@@ -113,8 +120,9 @@ async function tryFetch(inputParameters) {
                 break
             case 'TEXT':
                 data = await response.text()
-                core.setOutput('response', data.substr(0, 1023))
-                core.info(`response text: ${data.substr(0, 1023)}`)
+                const text = convert(data, options) // https://www.npmjs.com/package/html-to-text
+                core.setOutput('response', text)
+                core.info(`response text: ${text}`)
                 break
             default:
                 core.error('body-reading-method unknown')

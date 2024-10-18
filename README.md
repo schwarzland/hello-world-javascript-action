@@ -13,6 +13,8 @@ Know-How: https://github.com/actions/toolkit
 ```bash
 npm install node-fetch
 
+npm install html-to-text
+
 npm install
 ```
 
