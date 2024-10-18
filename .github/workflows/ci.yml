@@ -78,8 +78,8 @@ jobs:
               with:
                   url: 'https://www.google.de'
                   method: 'GET'
-                  headers: '{ "accept":"application/json" }'
-                  #                  body: ''
+                  # headers: '{ "accept":"application/json" }'
+                  # body: ''
                   body-reading-method: 'TEXT'
                   http-status: '200'
                   timeout: '5000'
