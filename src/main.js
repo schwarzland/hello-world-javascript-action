@@ -109,12 +109,12 @@ async function tryFetch(inputParameters) {
             case 'JSON':
                 data = await response.json()
                 core.setOutput('response', data)
-                //                core.info(`response json: ${JSON.stringify(data)}`)
+                core.info(`response json: ${JSON.stringify(data)}`)
                 break
             case 'TEXT':
                 data = await response.text()
                 core.setOutput('response', data)
-                //                core.info(`response text: ${data}`)
+                core.info(`response text: ${data}`)
                 break
             default:
                 core.error('body-reading-method unknown')
@@ -163,12 +163,14 @@ async function run() {
 
             if (httpStatus === inputParameters.httpStatus) {
                 core.info(`desired http-status achieved: ${httpStatus}`)
+                core.setOutput('result', 'ok')
                 break
             }
 
             const time = new Date().getTime() - timeStart
             if (time > inputParameters.timeout) {
                 core.error(`timeout reached: ${time} ms`)
+                core.setOutput('result', 'timeout')
                 break
             }
 
@@ -179,6 +181,10 @@ async function run() {
             maxLoop--
         } while (maxLoop > 0)
         core.info('--- loop ended')
+
+        if (maxLoop <= 0) {
+            core.setOutput('result', 'maxLoop')
+        }
 
         core.setOutput('http-status', httpStatus)
 

@@ -108,3 +108,4 @@ jobs:
                   echo actual http-status=${{ steps.waitForResponse.outputs.http-status }}
                   echo response json=${{ toJSON(steps.waitForResponse.outputs.response) }}
                   echo response text=${{ steps.waitForResponse.outputs.response }}
+                  echo result=${{ steps.waitForResponse.outputs.result }}

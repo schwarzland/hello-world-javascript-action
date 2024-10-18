@@ -58,7 +58,7 @@ jobs:
                   url: 'https://api.sampleapis.com/futurama/info'
                   method: 'GET'
                   headers: '{ "accept":"application/json" }'
-                  body: ''
+                  #                  body: ''
                   body-reading-method: 'JSON'
                   http-status: '200'
                   timeout: '5000'
@@ -70,16 +70,25 @@ jobs:
                   echo duration=${{ steps.waitForResponse1.outputs.duration }}
                   echo actual http-status=${{ steps.waitForResponse1.outputs.http-status }}
                   echo response=${{ toJSON(steps.waitForResponse1.outputs.response) }}
+                  echo result=${{ steps.waitForResponse1.outputs.result }}
 
             - name: Test local action 'Wait for Response' with Telekom
               id: waitForResponse2
               uses: schwarzland/wait-for-response-action@main
               with:
                   url: 'https://www.telekom.de'
+                  method: 'GET'
+                  headers: '{ "accept":"application/json" }'
+                  #                  body: ''
                   body-reading-method: 'TEXT'
+                  http-status: '200'
+                  timeout: '5000'
+                  single-fetch-timeout: '1000'
+                  waiting-time: '1000'
 
             - name: Print Output
               run: |
                   echo duration=${{ steps.waitForResponse2.outputs.duration }}
                   echo actual http-status=${{ steps.waitForResponse2.outputs.http-status }}
                   echo response=${{ steps.waitForResponse2.outputs.response }}
+                  echo result=${{ steps.waitForResponse2.outputs.result }}
