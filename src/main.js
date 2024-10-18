@@ -76,14 +76,6 @@ function getInputParameters() {
     return inputParameters
 }
 
-function checkStatus(response) {
-    if (response?.status) {
-        core.info(`Status: ${response.status}, ${response.statusText}`)
-        return parseInt(response.status)
-    }
-    return null
-}
-
 function getOptions(inputParameters) {
     const options = {
         method: inputParameters.method,
@@ -105,6 +97,7 @@ async function tryFetch(inputParameters) {
     let response = null
 
     try {
+        core.info(`fetch ${inputParameters.method} ${inputParameters.url}`)
         response = await fetch(inputParameters.url, getOptions(inputParameters))
 
         let data = null
@@ -139,7 +132,8 @@ async function tryFetch(inputParameters) {
         }
     }
 
-    return checkStatus(response)
+    core.info(`fetch http-status: ${response?.status}, ${response?.statusText}`)
+    return parseInt(response?.status)
 }
 
 function delay(time) {
