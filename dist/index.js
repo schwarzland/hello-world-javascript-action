@@ -30001,7 +30001,8 @@ async function run() {
 
         let maxLoop = 100
         do {
-            httpStatus = tryFetch(inputParameters)
+            core.info(`maxLoop: ${maxLoop}`)
+            httpStatus = await tryFetch(inputParameters)
 
             if (parseInt(httpStatus) === parseInt(inputParameters.httpStatus)) {
                 core.info('http-status erreicht')
