@@ -77,14 +77,7 @@ jobs:
               uses: schwarzland/wait-for-response-action@main
               with:
                   url: 'https://www.telekom.de'
-                  method: 'GET'
-                  headers: '{ "accept":"text/HTML" }'
-                  body: ''
                   body-reading-method: 'TEXT'
-                  http-status: '200'
-                  timeout: '5000'
-                  single-fetch-timeout: '1000'
-                  waiting-time: '1000'
 
             - name: Print Output
               id: output
