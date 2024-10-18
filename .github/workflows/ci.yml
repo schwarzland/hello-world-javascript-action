@@ -66,7 +66,6 @@ jobs:
                   waiting-time: '1000'
 
             - name: Print Output
-              id: output
               run: |
                   echo duration=${{ steps.waitForResponse1.outputs.duration }}
                   echo actual http-status=${{ steps.waitForResponse1.outputs.http-status }}
@@ -80,7 +79,6 @@ jobs:
                   body-reading-method: 'TEXT'
 
             - name: Print Output
-              id: output
               run: |
                   echo duration=${{ steps.waitForResponse2.outputs.duration }}
                   echo actual http-status=${{ steps.waitForResponse2.outputs.http-status }}
