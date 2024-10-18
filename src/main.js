@@ -56,34 +56,41 @@ function checkStatus(response) {
     return ''
 }
 
+function getOptions(inputParameters) {
+    let options = {
+        method: inputParameters.method,
+        signal: AbortSignal.timeout(parseInt(inputParameters.timeout))
+    }
+
+    if (inputParameters.headers != '') {
+        options.headers = new Headers(JSON.parse(inputParameters.headers))
+    }
+
+    if (inputParameters.body != '') {
+        options.body = inputParameters.body
+    }
+
+    return options
+}
+
 async function tryFetch(inputParameters) {
     try {
-        let options = {
-            method: inputParameters.method,
-            signal: AbortSignal.timeout(parseInt(inputParameters.timeout))
-        }
-        if (inputParameters.headers != '') {
-            options.headers = new Headers(JSON.parse(inputParameters.headers))
-        }
-        if (inputParameters.body != '') {
-            options.body = inputParameters.body
-        }
+        let response = await fetch(
+            inputParameters.url,
+            getOptions(inputParameters)
+        )
 
-        let response = await fetch(inputParameters.url, options)
         let data = null
-
         switch (inputParameters.bodyReadingMethod) {
             case 'JSON':
                 data = await response.json()
                 core.setOutput('response', JSON.stringify(data))
                 core.info(`response json: ${JSON.stringify(data)}`)
-                return data
                 break
             case 'TEXT':
                 data = await response.text()
                 core.setOutput('response', data)
                 core.info(`response text: ${data}`)
-                return data
                 break
             default:
                 core.error('body-reading-method unknown')
@@ -104,7 +111,8 @@ async function tryFetch(inputParameters) {
             core.error(`Error: ${error.name}, ${error.message}`)
         }
     }
-    return null
+
+    return checkStatus(response)
 }
 
 /**
@@ -117,14 +125,14 @@ async function run() {
 
         // try to get a response
         const timeStart = new Date().getTime()
-        tryFetch(inputParameters)
+        let httpStatus = null
+
+        httpStatus = tryFetch(inputParameters)
+        core.setOutput('http-status', httpStatus)
 
         // Outputs
         const time = new Date().getTime() - timeStart
         core.setOutput('time', time)
-
-        const httpStatus = checkStatus(response)
-        core.setOutput('http-status', httpStatus)
 
         // Output the payload for debugging
         //    core.info(
