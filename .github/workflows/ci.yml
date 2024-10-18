@@ -72,11 +72,11 @@ jobs:
                   echo response=${{ toJSON(steps.waitForResponse1.outputs.response) }}
                   echo result=${{ steps.waitForResponse1.outputs.result }}
 
-            - name: Test local action 'Wait for Response' with Telekom
+            - name: Test local action 'Wait for Response' with Google
               id: waitForResponse2
               uses: schwarzland/wait-for-response-action@main
               with:
-                  url: 'https://www.telekom.de'
+                  url: 'https://www.google.de'
                   method: 'GET'
                   headers: '{ "accept":"application/json" }'
                   #                  body: ''

@@ -29973,7 +29973,7 @@ async function tryFetch(inputParameters) {
             case 'TEXT':
                 data = await response.text()
                 core.setOutput('response', data)
-                core.info(`response text: ${data}`)
+                core.info(`response text: ${data.substr(0, 100)}`)
                 break
             default:
                 core.error('body-reading-method unknown')
