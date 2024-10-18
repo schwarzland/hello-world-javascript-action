@@ -113,8 +113,8 @@ async function tryFetch(inputParameters) {
                 break
             case 'TEXT':
                 data = await response.text()
-                core.setOutput('response', data)
-                core.info(`response text: ${data.substr(0, 100)}`)
+                core.setOutput('response', data.substr(0, 1023))
+                core.info(`response text: ${data.substr(0, 1023)}`)
                 break
             default:
                 core.error('body-reading-method unknown')
