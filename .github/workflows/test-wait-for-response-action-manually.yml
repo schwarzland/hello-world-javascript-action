@@ -106,6 +106,14 @@ jobs:
               run: |
                   echo duration=${{ steps.waitForResponse.outputs.duration }}
                   echo actual http-status=${{ steps.waitForResponse.outputs.http-status }}
-                  echo response json=${{ toJSON(steps.waitForResponse.outputs.response) }}
-                  echo response text=${{ steps.waitForResponse.outputs.response }}
                   echo result=${{ steps.waitForResponse.outputs.result }}
+
+            - name: Print JSON
+              if: ${{ inputs.body-reading-method == 'JSON' }}
+              run: |
+                  echo response json=${{ toJSON(steps.waitForResponse.outputs.response) }}
+
+            - name: Print TEXT
+              if: ${{ inputs.body-reading-method == 'TEXT' }}
+              run: |
+                  echo response text=${{ steps.waitForResponse.outputs.response }}

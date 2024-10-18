@@ -90,5 +90,5 @@ jobs:
               run: |
                   echo duration=${{ steps.waitForResponse2.outputs.duration }}
                   echo actual http-status=${{ steps.waitForResponse2.outputs.http-status }}
-                  echo response=${{ steps.waitForResponse2.outputs.response }}
+                  echo response='${{ steps.waitForResponse2.outputs.response }}'
                   echo result=${{ steps.waitForResponse2.outputs.result }}
