@@ -29934,8 +29934,9 @@ async function run() {
 
       response = await fetch(inputParameters.url, options)
 
-      const data = await response
+      const data = await response.text()
       core.setOutput('response', data)
+      core.info(`response: ${data}`)
     } catch (error) {
       if (error.name === 'TimeoutError') {
         core.error(
@@ -29956,7 +29957,6 @@ async function run() {
     core.setOutput('time', time)
 
     const httpStatus = checkStatus(response)
-    core.info(`httpStatus: ${httpStatus}`)
     core.setOutput('http-status', httpStatus)
 
     //    const timeoutReached = 'false'

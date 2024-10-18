@@ -75,10 +75,9 @@ async function run() {
 
       response = await fetch(inputParameters.url, options)
 
-      const data = await response.text();
-      core.setOutput('response', data);
-      core.info(`response: ${data}`);
-
+      const data = await response.text()
+      core.setOutput('response', data)
+      core.info(`response: ${data}`)
     } catch (error) {
       if (error.name === 'TimeoutError') {
         core.error(
