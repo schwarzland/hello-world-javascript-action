@@ -106,4 +106,5 @@ jobs:
               run: |
                   echo duration=${{ steps.waitForResponse.outputs.duration }}
                   echo actual http-status=${{ steps.waitForResponse.outputs.http-status }}
-                  echo response=${{ toJSON(steps.waitForResponse.outputs.response) }}
+                  echo response json=${{ toJSON(steps.waitForResponse.outputs.response) }}
+                  echo response text=${{ steps.waitForResponse.outputs.response }}
