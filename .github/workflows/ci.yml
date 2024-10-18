@@ -52,7 +52,7 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Test local action 'Wait for Response' with Futurama
-              id: waitForResponse
+              id: waitForResponse1
               uses: schwarzland/wait-for-response-action@main
               with:
                   url: 'https://api.sampleapis.com/futurama/info'
@@ -68,12 +68,12 @@ jobs:
             - name: Print Output
               id: output
               run: |
-                  echo duration=${{ steps.waitForResponse.outputs.duration }}
-                  echo actual http-status=${{ steps.waitForResponse.outputs.http-status }}
-                  echo response=${{ toJSON(steps.waitForResponse.outputs.response) }}
+                  echo duration=${{ steps.waitForResponse1.outputs.duration }}
+                  echo actual http-status=${{ steps.waitForResponse1.outputs.http-status }}
+                  echo response=${{ toJSON(steps.waitForResponse.outputs1.response) }}
 
             - name: Test local action 'Wait for Response' with Telekom
-              id: waitForResponse
+              id: waitForResponse2
               uses: schwarzland/wait-for-response-action@main
               with:
                   url: 'https://www.telekom.de'
@@ -82,6 +82,6 @@ jobs:
             - name: Print Output
               id: output
               run: |
-                  echo duration=${{ steps.waitForResponse.outputs.duration }}
-                  echo actual http-status=${{ steps.waitForResponse.outputs.http-status }}
-                  echo response=${{ toJSON(steps.waitForResponse.outputs.response) }}
+                  echo duration=${{ steps.waitForResponse2.outputs.duration }}
+                  echo actual http-status=${{ steps.waitForResponse2.outputs.http-status }}
+                  echo response=${{ toJSON(steps.waitForResponse.outputs2.response) }}
