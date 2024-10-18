@@ -9,7 +9,7 @@ on:
         default: 'https://api.sampleapis.com/simpsons/characters'
         type: string
 
-      desired-method:
+      method:
         description: Allowed methods are GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS
         required: true
         default: 'GET'
@@ -23,22 +23,16 @@ on:
           - HEAD
           - OPTIONS
 
-      request-headers:
+      headers:
         description: Request Headers in JSON-Format
         required: false
         default: '{ "accept":"application/json" }'
         type: string
 
-      expected-http-status:
+      http-status:
         description: The expected http status
         required: false
         default: '200'
-        type: string
-
-      interval:
-        description: The interval (milliseconds) determines how often the URL should be checked.
-        required: false
-        default: '1000'
         type: string
 
       timeout:
@@ -47,12 +41,18 @@ on:
         default: '5000'
         type: string
 
-      abort-at-timeout:
-        description:
-          Should the action be aborted on timeout (true), or should it continue running (false)
-        required: false
-        default: true
-        type: boolean
+#      interval:
+#        description: The interval (milliseconds) determines how often the URL should be checked.
+#        required: false
+#        default: '1000'
+#        type: string
+
+#      abort-at-timeout:
+#        description:
+#          Should the action be aborted on timeout (true), or should it continue running (false)
+#        required: false
+#        default: true
+#        type: boolean
 
 permissions:
   actions: read
@@ -72,18 +72,16 @@ jobs:
         uses: schwarzland/wait-for-response-action@main
         with:
           url: ${{ inputs.url }}
-          desired-method: ${{ inputs.desired-method }}
-          request-headers: ${{ inputs.request-headers }}
-          expected-http-status: ${{ inputs.expected-http-status }}
-          interval: ${{ inputs.interval }}
+          method: ${{ inputs.method }}
+          headers: ${{ inputs.headers }}
+          http-status: ${{ inputs.http-status }}
           timeout: ${{ inputs.timeout }}
-          abort-at-timeout: ${{ inputs.abort-at-timeout }}
+#          interval: ${{ inputs.interval }}
+#          abort-at-timeout: ${{ inputs.abort-at-timeout }}
 
       - name: Print Output
         id: output
         run: |
-          echo time ${{ steps.waitForResponse.outputs.time }}
-          echo timeout-reached ${{ steps.waitForResponse.outputs.timeout-reached }}
-          echo httpStatus ${{ steps.waitForResponse.outputs.httpStatus }}
-
-#          echo response ${{ steps.waitForResponse.outputs.response }}
+          echo time=${{ steps.waitForResponse.outputs.time }}
+          echo httpStatus=${{ steps.waitForResponse.outputs.http-status }}
+          echo response=${{ steps.waitForResponse.outputs.response }}

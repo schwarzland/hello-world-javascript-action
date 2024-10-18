@@ -51,23 +51,22 @@ jobs:
         id: checkout
         uses: actions/checkout@v4
 
-      - name: Test local action 'Wait for Response'
+      - name: Test local action 'Wait for Response' with simpsons
         id: waitForResponse
         uses: schwarzland/wait-for-response-action@main
         with:
           url: 'https://api.sampleapis.com/simpsons/characters'
-          desired-method: 'GET'
-          request-headers: '{ "accept":"application/json" }'
-          expected-http-status: '200'
-          interval: '1000'
+          method: 'GET'
+          headers: '{ "accept":"application/json" }'
+          http-status: '200'
           timeout: '5000'
-          abort-at-timeout: 'false'
+#          interval: '1000'
+#          abort-at-timeout: 'false'
 
       - name: Print Output
         id: output
         run: |
-          echo time ${{ steps.waitForResponse.outputs.time }}
-          echo timeout-reached ${{ steps.waitForResponse.outputs.timeout-reached }}
-          echo httpStatus ${{ steps.waitForResponse.outputs.httpStatus }}
+          echo time=${{ steps.waitForResponse.outputs.time }}
+          echo httpStatus=${{ steps.waitForResponse.outputs.http-status }}
+          echo response=${{ steps.waitForResponse.outputs.response }}
 
-#          echo response ${{ steps.waitForResponse.outputs.response }}
