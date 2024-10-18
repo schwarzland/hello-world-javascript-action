@@ -46,7 +46,7 @@ inputs:
         default: '5000'
 
 outputs:
-    time:
+    duration:
         description: The time it took to complete the request.
 
     http-status:

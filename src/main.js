@@ -57,6 +57,12 @@ function checkStatus(response) {
 }
 
 function getOptions(inputParameters) {
+    inputParameters.timeout = parseInt(inputParameters.timeout)
+    if (inputParameters.timeout < 200) {
+        core.warning('timeout < 200 ms, new timeout = 400 ms')
+        inputParameters.timeout = 400
+    }
+
     let options = {
         method: inputParameters.method,
         signal: AbortSignal.timeout(parseInt(inputParameters.timeout))
@@ -114,6 +120,10 @@ async function tryFetch(inputParameters) {
     return checkStatus(response)
 }
 
+function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time))
+}
+
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
@@ -126,12 +136,34 @@ async function run() {
         const timeStart = new Date().getTime()
         let httpStatus = null
 
-        httpStatus = tryFetch(inputParameters)
+        let maxLoop = 100
+        do {
+            httpStatus = tryFetch(inputParameters)
+
+            if (httpStatus === inputParameters.httpStatus) {
+                core.info('http-status erreicht')
+                break
+            }
+
+            const time = new Date().getTime() - timeStart
+            if (time > 5000) {
+                core.error('Zeit abgelaufen')
+                break
+            }
+
+            core.info('warten ...')
+            await delay(1000)
+            core.info('warten fertig')
+
+            maxLoop--
+        } while (maxLoop > 0)
+        core.info('Schleife beendet ...')
+
         core.setOutput('http-status', httpStatus)
 
         // Outputs
-        const time = new Date().getTime() - timeStart
-        core.setOutput('time', time)
+        const duration = new Date().getTime() - timeStart
+        core.setOutput('duration', duration)
 
         // Output the payload for debugging
         //    core.info(

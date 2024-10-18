@@ -66,6 +66,6 @@ jobs:
             - name: Print Output
               id: output
               run: |
-                  echo time=${{ steps.waitForResponse.outputs.time }}
-                  echo httpStatus=${{ steps.waitForResponse.outputs.http-status }}
+                  echo duration=${{ steps.waitForResponse.outputs.duration }}
+                  echo actual http-status=${{ steps.waitForResponse.outputs.http-status }}
                   echo response=${{ steps.waitForResponse.outputs.response }}
