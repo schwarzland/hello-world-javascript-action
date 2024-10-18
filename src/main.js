@@ -111,7 +111,7 @@ async function tryFetch(inputParameters) {
         switch (inputParameters.bodyReadingMethod) {
             case 'JSON':
                 data = await response.json()
-                core.setOutput('response', JSON.stringify(data))
+                core.setOutput('response', `${JSON.stringify(data)}`)
                 //                core.info(`response json: ${JSON.stringify(data)}`)
                 break
             case 'TEXT':
