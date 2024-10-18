@@ -56,6 +56,57 @@ function checkStatus(response) {
     return ''
 }
 
+async function tryFetch(inputParameters) {
+    try {
+        let options = {
+            method: inputParameters.method,
+            signal: AbortSignal.timeout(parseInt(inputParameters.timeout))
+        }
+        if (inputParameters.headers != '') {
+            options.headers = new Headers(JSON.parse(inputParameters.headers))
+        }
+        if (inputParameters.body != '') {
+            options.body = inputParameters.body
+        }
+
+        let response = await fetch(inputParameters.url, options)
+        let data = null
+
+        switch (inputParameters.bodyReadingMethod) {
+            case 'JSON':
+                data = await response.json()
+                core.setOutput('response', JSON.stringify(data))
+                core.info(`response json: ${JSON.stringify(data)}`)
+                return data
+                break
+            case 'TEXT':
+                data = await response.text()
+                core.setOutput('response', data)
+                core.info(`response text: ${data}`)
+                return data
+                break
+            default:
+                core.error('body-reading-method unknown')
+        }
+    } catch (error) {
+        if (error.name === 'TimeoutError') {
+            core.error(
+                `Timeout: It took more than ${inputParameters.timeout} milliseconds to get the result!`
+            )
+        } else if (error.name === 'AbortError') {
+            core.error(
+                'Fetch aborted by user action (browser stop button, closing tab, etc.'
+            )
+        } else if (error.name === 'TypeError') {
+            core.error('AbortSignal.timeout() method is not supported')
+        } else {
+            // A network error, or some other problem.
+            core.error(`Error: ${error.name}, ${error.message}`)
+        }
+    }
+    return null
+}
+
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
@@ -65,56 +116,8 @@ async function run() {
         const inputParameters = getInputParameters()
 
         // try to get a response
-        let response = null
         const timeStart = new Date().getTime()
-
-        try {
-            let options = {
-                method: inputParameters.method,
-                signal: AbortSignal.timeout(parseInt(inputParameters.timeout))
-            }
-            if (inputParameters.headers != '') {
-                options.headers = new Headers(
-                    JSON.parse(inputParameters.headers)
-                )
-            }
-            if (inputParameters.body != '') {
-                options.body = inputParameters.body
-            }
-
-            response = await fetch(inputParameters.url, options)
-
-            let data = null
-            switch (inputParameters.bodyReadingMethod) {
-                case 'JSON':
-                    data = await response.json()
-                    core.setOutput('response', JSON.stringify(data))
-                    core.info(`response: ${JSON.stringify(data)}`)
-                    break
-                case 'TEXT':
-                    data = await response.text()
-                    core.setOutput('response', data)
-                    core.info(`response: ${data}`)
-                    break
-                default:
-                    core.error('body-reading-method unknown')
-            }
-        } catch (error) {
-            if (error.name === 'TimeoutError') {
-                core.error(
-                    `Timeout: It took more than ${inputParameters.timeout} milliseconds to get the result!`
-                )
-            } else if (error.name === 'AbortError') {
-                core.error(
-                    'Fetch aborted by user action (browser stop button, closing tab, etc.'
-                )
-            } else if (error.name === 'TypeError') {
-                core.error('AbortSignal.timeout() method is not supported')
-            } else {
-                // A network error, or some other problem.
-                core.error(`Error: ${error.name}, message: ${error.message}`)
-            }
-        }
+        tryFetch(inputParameters)
 
         // Outputs
         const time = new Date().getTime() - timeStart
