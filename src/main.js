@@ -1,6 +1,7 @@
 const core = require('@actions/core')
 const github = require('@actions/github')
 
+
 class InputParameters {
   url
   desiredMethod
@@ -11,35 +12,42 @@ class InputParameters {
   abortAtTimeout
 }
 
+
 function getInputParameters() {
   const inputParameters = new InputParameters()
 
   inputParameters.url = core.getInput('url', { required: true })
-  //    core.info(`url: ${inputParameters.url}`)
-  inputParameters.desiredMethod = core.getInput('desired-method', {
+  core.info(`url: ${inputParameters.url}`)
+
+  inputParameters.method = core.getInput('method', {
     required: true
   })
-  //    core.info(`desired-method: ${inputParameters.desiredMethod}`)
-  inputParameters.requestHeaders = core.getInput('request-headers', {
+  core.info(`method: ${inputParameters.method}`)
+
+  inputParameters.headers = core.getInput('headers', {
     required: true
   })
-  //    core.info(`request-headers: ${inputParameters.requestHeaders}`)
-  inputParameters.expectedHttpStatus = core.getInput('expected-http-status', {
+  core.info(`headers: ${inputParameters.headers}`)
+
+  inputParameters.httpStatus = core.getInput('http-status', {
     required: false
   })
-  //    core.info(`expected-http-status: ${inputParameters.expectedHttpStatus}`)
-  inputParameters.interval = core.getInput('interval', { required: false })
-  //    core.info(`interval: ${inputParameters.interval}`)
+  core.info(`http-status: ${inputParameters.httpStatus}`)
+
   inputParameters.timeout = core.getInput('timeout', { required: false })
-  //    core.info(`timeout: ${inputParameters.timeout}`)
-  inputParameters.abortAtTimeout = core.getBooleanInput('abort-at-timeout', {
-    required: false
-  })
+  core.info(`timeout: ${inputParameters.timeout}`)
+
+//  inputParameters.interval = core.getInput('interval', { required: false })
+  //    core.info(`interval: ${inputParameters.interval}`)
+//  inputParameters.abortAtTimeout = core.getBooleanInput('abort-at-timeout', {
+//    required: false
+//  })
   //    core.info(`abort-at-timeout: ${inputParameters.abortAtTimeout}`)
 
   core.info(`Input-Parameters: ${JSON.stringify(inputParameters)}`)
   return inputParameters
 }
+
 
 function checkStatus(response) {
   if (response?.status) {
@@ -48,6 +56,7 @@ function checkStatus(response) {
   }
   return ''
 }
+
 
 /**
  * The main function for the action.
@@ -63,20 +72,20 @@ async function run() {
 
     try {
       const options = {
-        method: inputParameters.desiredMethod,
-        headers: new Headers(JSON.parse(inputParameters.requestHeaders)),
+        method: inputParameters.method,
+        headers: new Headers(JSON.parse(inputParameters.headers)),
         signal: AbortSignal.timeout(parseInt(inputParameters.timeout))
       }
 
       response = await fetch(inputParameters.url, options)
 
-      const data = await response.json()
-      core.setOutput('response', JSON.stringify(data))
+      const data = await response
+      core.setOutput('response', data)
+
     } catch (error) {
-      core.error(`Error: ${error}`)
 
       if (error.name === 'TimeoutError') {
-        core.error('Timeout: It took more than 5 seconds to get the result!')
+        core.error(`Timeout: It took more than ${inputParameters.timeout} milliseconds to get the result!`)
       } else if (error.name === 'AbortError') {
         core.error('Fetch aborted by user action (browser stop button, closing tab, etc.')
       } else if (error.name === 'TypeError') {
@@ -91,17 +100,19 @@ async function run() {
     const time = new Date().getTime() - timeStart
     core.setOutput('time', time)
 
-    const timeoutReached = 'false'
-    core.setOutput('timeout-reached', timeoutReached)
-
     const httpStatus = checkStatus(response)
     core.info(`httpStatus: ${httpStatus}`)
-    core.setOutput('httpStatus', httpStatus)
+    core.setOutput('http-status', httpStatus)
+
+
+//    const timeoutReached = 'false'
+//    core.setOutput('timeout-reached', timeoutReached)
 
     // Output the payload for debugging
     //    core.info(
     //      `The event payload: ${JSON.stringify(github.context.payload, null, 2)}`
     //    )
+
   } catch (error) {
     // Fail the workflow step if an error occurs
     core.setFailed(`Action error: ${error.message}`)
