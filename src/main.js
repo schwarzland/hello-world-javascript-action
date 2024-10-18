@@ -74,11 +74,10 @@ function getOptions(inputParameters) {
 }
 
 async function tryFetch(inputParameters) {
+    let response = null
+
     try {
-        let response = await fetch(
-            inputParameters.url,
-            getOptions(inputParameters)
-        )
+        response = await fetch(inputParameters.url, getOptions(inputParameters))
 
         let data = null
         switch (inputParameters.bodyReadingMethod) {
