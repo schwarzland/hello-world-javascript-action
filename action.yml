@@ -76,7 +76,7 @@ outputs:
         description: The service's response
 
     result:
-        description: query result (ok, timeout, maxLoop)
+        description: query result (OK, timeout, maxLoop)
 
 runs:
     using: node20

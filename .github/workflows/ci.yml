@@ -52,14 +52,14 @@ jobs:
               uses: schwarzland/wait-for-response-action@main
               with:
                   url: 'https://api.sampleapis.com/futurama/info'
-                  method: 'GET'
+                  method: GET
                   headers: '{ "accept":"application/json" }'
-                  #                  body: ''
-                  body-reading-method: 'JSON'
-                  http-status: '200'
-                  timeout: '2000'
-                  single-fetch-timeout: '500'
-                  waiting-time: '500'
+                  # body: ''
+                  body-reading-method: JSON
+                  http-status: 200
+                  timeout: 5000
+                  single-fetch-timeout: 500
+                  waiting-time: 500
                   stop-on-error: true
 
             - name: Print Output
@@ -78,14 +78,15 @@ jobs:
               uses: schwarzland/wait-for-response-action@main
               with:
                   url: 'https://www.google.de'
-                  method: 'GET'
+                  # method: 'GET'
                   # headers: '{ "accept":"application/json" }'
                   # body: ''
                   # body-reading-method: 'TEXT'
-                  http-status: '200'
-                  timeout: '5000'
-                  single-fetch-timeout: '1000'
-                  waiting-time: '1000'
+                  # http-status: '200'
+                  # timeout: '5000'
+                  # single-fetch-timeout: '1000'
+                  # waiting-time: '1000'
+                  # stop-on-error: false
 
             - name: Print Output
               run: |
