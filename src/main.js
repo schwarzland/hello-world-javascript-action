@@ -69,7 +69,7 @@ function getInputParameters() {
         core.warning('timeout > 1800000 ms, new timeout = 1800000 ms') // 30 minutes
         inputParameters.timeout = 1800000
     }
-    core.info(`timeout: ${inputParameters.timeout}`)
+    core.info(`timeout: ${inputParameters.timeout} ms`)
 
     inputParameters.singleFetchTimeout = parseInt(
         core.getInput('single-fetch-timeout', { required: false })
@@ -86,7 +86,7 @@ function getInputParameters() {
         ) // 5 minutes
         inputParameters.singleFetchTimeout = 300000
     }
-    core.info(`single-fetch-timeout: ${inputParameters.singleFetchTimeout}`)
+    core.info(`single-fetch-timeout: ${inputParameters.singleFetchTimeout} ms`)
 
     inputParameters.waitingTime = parseInt(
         core.getInput('waiting-time', { required: false })
@@ -99,11 +99,20 @@ function getInputParameters() {
         core.warning('waiting-time > 600000 ms, new waiting-time = 600000 ms') // 10 minutes
         inputParameters.waitingTime = 600000
     }
-    core.info(`waiting-time: ${inputParameters.waitingTime}`)
+    core.info(`waiting-time: ${inputParameters.waitingTime} ms`)
 
-    inputParameters.stopOnError =
-        core.getInput('stop-on-error', { required: false }).toLowerCase() ===
-        'true'
+    switch (core.getInput('stop-on-error', { required: false }).toLowerCase()) {
+        case 'true': {
+            inputParameters.stopOnError = true
+            break
+        }
+        case 'false': {
+            inputParameters.stopOnError = false
+            break
+        }
+        default:
+            inputParameters.stopOnError = false
+    }
     core.info(`stop-on-error: ${inputParameters.stopOnError}`)
 
     return inputParameters
