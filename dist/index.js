@@ -34811,7 +34811,9 @@ function getInputParameters() {
             required: false
         })
         .toUpperCase()
-    core.info(`body-reading-method: ${inputParameters.bodyReadingMethod}`)
+    if (inputParameters.bodyReadingMethod !== '') {
+        core.info(`body-reading-method: ${inputParameters.bodyReadingMethod}`)
+    }
 
     inputParameters.httpStatus = parseInt(
         core.getInput('http-status', {
@@ -34827,14 +34829,26 @@ function getInputParameters() {
         core.warning('timeout < 500 ms, new timeout = 500 ms')
         inputParameters.timeout = 500
     }
+    if (inputParameters.timeout > 1800000) {
+        core.warning('timeout > 1800000 ms, new timeout = 1800000 ms') // 30 minutes
+        inputParameters.timeout = 1800000
+    }
     core.info(`timeout: ${inputParameters.timeout}`)
 
     inputParameters.singleFetchTimeout = parseInt(
         core.getInput('single-fetch-timeout', { required: false })
     )
     if (inputParameters.singleFetchTimeout < 200) {
-        core.warning('single-fetch-timeout < 200 ms, new timeout = 200 ms')
+        core.warning(
+            'single-fetch-timeout < 200 ms, new single-fetch-timeout = 200 ms'
+        )
         inputParameters.singleFetchTimeout = 200
+    }
+    if (inputParameters.singleFetchTimeout > 300000) {
+        core.warning(
+            'single-fetch-timeout > 300000 ms, new single-fetch-timeout = 300000 ms'
+        ) // 5 minutes
+        inputParameters.singleFetchTimeout = 300000
     }
     core.info(`single-fetch-timeout: ${inputParameters.singleFetchTimeout}`)
 
@@ -34844,6 +34858,10 @@ function getInputParameters() {
     if (inputParameters.waitingTime < 200) {
         core.warning('waiting-time < 200 ms, new waiting-time = 200 ms')
         inputParameters.waitingTime = 200
+    }
+    if (inputParameters.waitingTime > 600000) {
+        core.warning('waiting-time > 600000 ms, new waiting-time = 600000 ms') // 10 minutes
+        inputParameters.waitingTime = 600000
     }
     core.info(`waiting-time: ${inputParameters.waitingTime}`)
 
@@ -34932,7 +34950,7 @@ async function run() {
         const timeStart = new Date().getTime()
         let httpStatus = null
 
-        let maxLoop = 100
+        let maxLoop = inputParameters.timeout / inputParameters.waitingTime
         do {
             core.info(`--- maxLoop: ${maxLoop}`)
             httpStatus = await tryFetch(inputParameters)
@@ -34952,9 +34970,8 @@ async function run() {
                 break
             }
 
-            core.info(`start waiting ${inputParameters.waitingTime} ms`)
+            core.info(`waiting ${inputParameters.waitingTime} ms`)
             await delay(inputParameters.waitingTime)
-            core.info(`waiting completed`)
 
             maxLoop--
         } while (maxLoop > 0)
