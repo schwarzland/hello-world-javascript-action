@@ -104,6 +104,7 @@ jobs:
                   timeout: ${{ inputs.timeout }}
                   single-fetch-timeout: ${{ inputs.single-fetch-timeout }}
                   waiting-time: ${{ inputs.waiting-time }}
+                  stop-on-error: ${{ inputs.stop-on-error }}
 
             - name: Print Output
               id: output

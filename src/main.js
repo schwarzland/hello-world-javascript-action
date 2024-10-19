@@ -101,25 +101,9 @@ function getInputParameters() {
     }
     core.info(`waiting-time: ${inputParameters.waitingTime} ms`)
 
-    inputParameters.stopOnError = core.getInput('stop-on-error', {
-        required: false
-    })
-    core.info(`stop-on-error-input: ${inputParameters.stopOnError}`)
-    core.info(
-        `stop-on-error-input-after-lower-case: ${inputParameters.stopOnError.toLowerCase()}`
-    )
-    switch (inputParameters.stopOnError.toLowerCase()) {
-        case 'true': {
-            inputParameters.stopOnError = true
-            break
-        }
-        case 'false': {
-            inputParameters.stopOnError = false
-            break
-        }
-        default:
-            inputParameters.stopOnError = false
-    }
+    inputParameters.stopOnError =
+        core.getInput('stop-on-error', { required: false }).toLowerCase() ===
+        'true'
     core.info(`stop-on-error: ${inputParameters.stopOnError}`)
 
     return inputParameters
