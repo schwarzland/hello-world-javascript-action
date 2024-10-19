@@ -34866,8 +34866,8 @@ function getInputParameters() {
 
 function getOptions(inputParameters) {
     const options = {
-        method: inputParameters.method
-        //        signal: AbortSignal.timeout(inputParameters.singleFetchTimeout)
+        method: inputParameters.method,
+        signal: AbortSignal.timeout(inputParameters.singleFetchTimeout)
     }
 
     if (inputParameters.headers !== '') {
@@ -34881,51 +34881,34 @@ function getOptions(inputParameters) {
     return options
 }
 
-// https://dmitripavlutin.com/timeout-fetch-request/
-async function fetchWithTimeout(inputParameters, options = {}) {
-    const { timeout = inputParameters.singleFetchTimeout } = options
-
-    const controller = new AbortController()
-    const id = setTimeout(() => controller.abort(), timeout)
-
-    const response = await fetch(inputParameters.url, {
-        ...options,
-        signal: controller.signal
-    })
-    clearTimeout(id)
-
-    return response
-}
-
 async function tryFetch(inputParameters) {
     let response = null
 
     try {
         core.info(`fetch ${inputParameters.method} ${inputParameters.url}`)
-        //        response = await fetch(inputParameters.url, getOptions(inputParameters))
-        response = await fetchWithTimeout(
-            inputParameters,
-            getOptions(inputParameters)
-        )
+        response = await fetch(inputParameters.url, getOptions(inputParameters))
 
         let data = null
         switch (inputParameters.bodyReadingMethod) {
-            case 'JSON':
+            case 'JSON': {
                 data = await response.json()
                 core.setOutput('response', data)
                 core.info(`response json: ${JSON.stringify(data)}`)
                 break
-            case 'TEXT':
+            }
+            case 'TEXT': {
                 data = await response.text()
                 const text = convert(data, { wordwrap: 130 }) // https://www.npmjs.com/package/html-to-text
                 core.setOutput('response', text)
                 core.info(`response text: ${text}`)
                 break
-            default:
+            }
+            default: {
                 core.info(
                     'body-reading-method not specified, the response-body is not read'
                 )
                 core.setOutput('response', undefined)
+            }
         }
     } catch (error) {
         if (error.name === 'TimeoutError') {

@@ -42,7 +42,7 @@ inputs:
     timeout:
         description:
             The timeout (at least 500 milliseconds) determines when the entire
-            query should be aborted..
+            query should be aborted.
         required: false
         default: '5000'
 

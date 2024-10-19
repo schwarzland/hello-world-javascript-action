@@ -1,4 +1,4 @@
-name: Example Workflow
+name: Wait for a Response Workflow
 
 on:
     workflow_dispatch:
@@ -43,11 +43,7 @@ on:
                     specified, the body is not read.
                 required: false
                 default: ''
-                type: choice
-                options:
-                    - JSON
-                    - TEXT
-                    - ''
+                type: string
 
             http-status:
                 description: The expected http status

@@ -47,9 +47,9 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - name: Checkout
-              id: checkout
-              uses: actions/checkout@v4
+            #            - name: Checkout
+            #              id: checkout
+            #              uses: actions/checkout@v4
 
             - name: Test local action 'Wait for Response' with Futurama
               id: waitForResponse1
@@ -61,9 +61,9 @@ jobs:
                   #                  body: ''
                   body-reading-method: 'JSON'
                   http-status: '200'
-                  timeout: '5000'
-                  single-fetch-timeout: '1000'
-                  waiting-time: '1000'
+                  timeout: '2000'
+                  single-fetch-timeout: '500'
+                  waiting-time: '500'
 
             - name: Print Output
               run: |
