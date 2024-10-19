@@ -54,7 +54,7 @@ jobs:
                   url: 'https://api.sampleapis.com/futurama/info'
                   method: GET
                   headers: '{ "accept":"application/json" }'
-                  # body: ''
+                  body: ''
                   body-reading-method: JSON
                   http-status: 200
                   timeout: 5000
