@@ -63,7 +63,7 @@ inputs:
     stop-on-error:
         description: If TRUE, the action is aborted on timeout-error.
         required: false
-        default: 'FALSE'
+        default: 'false'
 
 outputs:
     duration:
