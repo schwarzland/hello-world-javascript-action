@@ -60,6 +60,29 @@ jobs:
                     echo result=${{ steps.waitForResponse.outputs.result }}
 ```
 
+The above action produces this edition:
+
+```text
+Run schwarzland/wait-for-response-action@main
+url: https://api.sampleapis.com/futurama/info
+method: GET
+headers: { "accept":"application/json" }
+body-reading-method: JSON
+http-status: 200
+timeout: 5000 ms
+single-fetch-timeout: 500 ms
+waiting-time: 500 ms
+stop-on-error: true
+--- maxLoop: 10
+fetch GET https://api.sampleapis.com/futurama/info
+response json: [{"synopsis":"Philip J. Fry is a 25 year old delivery boy living in New York City who is cryogenically frozen on New Year's 1999 for 1000 years, where he wakes up in New New York City on December 31, 2999. There, he meets Turanga Leela, a tough but loving, beautiful one-eyed alien; and Bender, an alcohol-powered bending robot who is addicted to liquor, cigars, stealing, amongst other things. Eventually, they all meet up with Fry's Great, Great, Great, etc... Nephew, Hubert J. Farnsworth. Farnsworth is a very old man who is a genius but is very senile and forgetful. Fry, Leela, and Bender wind up working for Farnsworth's Planet Express Delivery Service. They then meet their co-workers; Amy Wong, who is a Martian intern who comes from a rich family, but is still a human who is very hip. Also, there is Hermes Conrad, who manages the delivery service and is pretty strict. Hermes seems Jamaican in voice and look. And finally, there's Dr. John Zoidberg, a lobster-like alien who is the crew's doctor. Unfortunately, he knows nothing about humans. Fry, Leela, Bender, and sometimes Amy and Dr. Zoidberg travel around the universe risking life and limb delivering packages and performing charitable tasks for tax deductions.","yearsAired":"1999–2013","creators":[{"name":"David X. Cohen","url":"http://www.imdb.com/name/nm0169326"},{"name":"Matt Groening","url":"http://www.imdb.com/name/nm0004981"}],"id":1}]
+fetch http-status: 200, OK
+desired http-status achieved: 200
+--- loop ended
+duration: 257 ms
+result: OK
+```
+
 ## Example
 
 ### Waiting for a backend to start after a deploy.
@@ -92,13 +115,118 @@ jobs:
             - name: Backend is starting
               uses: schwarzland/wait-for-response-action@main
               with:
-                  url: 'https://myBackend.com/api-docs'
-                  timeout: '60000'
+                  url: 'https://api.sampleapis.com/futurama/info'
+                  timeout: 60000
                   stop-on-error: true
 
             - name: Performing Test with Bruno
               uses: krummbar/bruno-run-action@v0.2.0 # https://github.com/krummbar/bruno-run-action
               # ...
+```
+
+The above action produces this edition:
+
+```text
+Run schwarzland/wait-for-response-action@main
+url: https://api.sampleapis.com/futurama/info
+method: GET
+http-status: 200
+timeout: 60000 ms
+single-fetch-timeout: 1000 ms
+waiting-time: 1000 ms
+stop-on-error: true
+--- maxLoop: 60
+fetch GET https://api.sampleapis.com/futurama/info
+body-reading-method not specified, the response-body is not read
+fetch http-status: 200, OK
+desired http-status achieved: 200
+--- loop ended
+duration: 176 ms
+result: OK
+```
+
+## Waiting for a slow Frontend
+
+```yaml
+jobs:
+    deploy:
+        # ...
+
+    smoke-test:
+        name: Smoke-Test
+        runs-on: ubuntu-latest
+        steps:
+            - name: Where is the Telekom
+              uses: schwarzland/wait-for-response-action@main
+              with:
+                  url: 'https://www.telekom.de'
+                  timeout: 10000 # try it 10 seconds
+                  single-fetch-timeout: 200 # 200 milliseconds are a short time for a fetch
+                  stop-on-error: true # stop the action on timeout
+
+            - name: Performing Test with Bruno
+              uses: krummbar/bruno-run-action@v0.2.0 # https://github.com/krummbar/bruno-run-action
+              # ...
+```
+
+The resource could not meet the condition to respond within 200 milliseconds and
+the timeout occurred after 10 seconds (`Error: timeout reached: 11016 ms`). The
+action was aborted completely
+(`Error: Action failed because of stop-on-error is set and result is not OK: timeout`)
+
+```text
+Run schwarzland/wait-for-response-action@main
+url: https://www.telekom.de
+method: GET
+http-status: 200
+timeout: 10000 ms
+single-fetch-timeout: 200 ms
+waiting-time: 1000 ms
+stop-on-error: true
+--- maxLoop: 10
+fetch GET https://www.telekom.de
+Error: Timeout: It took more than 200 milliseconds to get the result!
+waiting 1000 ms
+--- maxLoop: 9
+fetch GET https://www.telekom.de
+Error: Timeout: It took more than 200 milliseconds to get the result!
+waiting 1000 ms
+--- maxLoop: 8
+fetch GET https://www.telekom.de
+Error: Timeout: It took more than 200 milliseconds to get the result!
+waiting 1000 ms
+--- maxLoop: 7
+fetch GET https://www.telekom.de
+Error: Timeout: It took more than 200 milliseconds to get the result!
+waiting 1000 ms
+--- maxLoop: 6
+fetch GET https://www.telekom.de
+Error: Timeout: It took more than 200 milliseconds to get the result!
+waiting 1000 ms
+--- maxLoop: 5
+fetch GET https://www.telekom.de
+Error: Timeout: It took more than 200 milliseconds to get the result!
+waiting 1000 ms
+--- maxLoop: 4
+fetch GET https://www.telekom.de
+Error: Timeout: It took more than 200 milliseconds to get the result!
+waiting 1000 ms
+--- maxLoop: 3
+fetch GET https://www.telekom.de
+Error: Timeout: It took more than 200 milliseconds to get the result!
+waiting 1000 ms
+--- maxLoop: 2
+fetch GET https://www.telekom.de
+Error: Timeout: It took more than 200 milliseconds to get the result!
+waiting 1000 ms
+--- maxLoop: 1
+fetch GET https://www.telekom.de
+Error: Timeout: It took more than 200 milliseconds to get the result!
+Error: timeout reached: 11016 ms
+--- loop ended
+duration: 11016 ms
+result: timeout
+Error: Action failed because of stop-on-error is set and result is not OK: timeout
 ```
 
 ## Inputs
