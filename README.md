@@ -19,7 +19,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - - name: Wait-For-Response with Futurama
-                uses: schwarzland/wait-for-response-action@main
+                uses: schwarzland/wait-for-response-action@v1.0.0
                 id: waitForResponse
                 with:
                     # The URL to be checked
@@ -113,7 +113,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Backend is starting
-              uses: schwarzland/wait-for-response-action@main
+              uses: schwarzland/wait-for-response-action@v1.0.0
               with:
                   url: 'https://api.sampleapis.com/futurama/info'
                   timeout: 60000
@@ -157,7 +157,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Where is the Telekom
-              uses: schwarzland/wait-for-response-action@main
+              uses: schwarzland/wait-for-response-action@v1.0.0
               with:
                   url: 'https://www.telekom.de'
                   timeout: 10000 # try it 10 seconds
