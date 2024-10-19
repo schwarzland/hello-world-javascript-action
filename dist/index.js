@@ -34866,8 +34866,8 @@ function getInputParameters() {
 
 function getOptions(inputParameters) {
     const options = {
-        method: inputParameters.method,
-        signal: AbortSignal.timeout(inputParameters.singleFetchTimeout)
+        method: inputParameters.method
+        //        signal: AbortSignal.timeout(inputParameters.singleFetchTimeout)
     }
 
     if (inputParameters.headers !== '') {
@@ -34881,12 +34881,32 @@ function getOptions(inputParameters) {
     return options
 }
 
+// https://dmitripavlutin.com/timeout-fetch-request/
+async function fetchWithTimeout(inputParameters, options = {}) {
+    const { timeout = inputParameters.singleFetchTimeout } = options
+
+    const controller = new AbortController()
+    const id = setTimeout(() => controller.abort(), timeout)
+
+    const response = await fetch(inputParameters.url, {
+        ...options,
+        signal: controller.signal
+    })
+    clearTimeout(id)
+
+    return response
+}
+
 async function tryFetch(inputParameters) {
     let response = null
 
     try {
         core.info(`fetch ${inputParameters.method} ${inputParameters.url}`)
-        response = await fetch(inputParameters.url, getOptions(inputParameters))
+        //        response = await fetch(inputParameters.url, getOptions(inputParameters))
+        response = await fetchWithTimeout(
+            inputParameters,
+            getOptions(inputParameters)
+        )
 
         let data = null
         switch (inputParameters.bodyReadingMethod) {
@@ -34952,6 +34972,7 @@ async function run() {
         do {
             core.info(`--- maxLoop: ${maxLoop}`)
             httpStatus = await tryFetch(inputParameters)
+            core.setOutput('http-status', httpStatus)
 
             if (httpStatus !== 'Error') {
                 if (httpStatus === inputParameters.httpStatus) {
@@ -34976,10 +34997,9 @@ async function run() {
         core.info('--- loop ended')
 
         if (maxLoop <= 0) {
+            core.error(`maxLoop reached`)
             core.setOutput('result', 'maxLoop')
         }
-
-        core.setOutput('http-status', httpStatus)
 
         // Outputs
         const duration = new Date().getTime() - timeStart
