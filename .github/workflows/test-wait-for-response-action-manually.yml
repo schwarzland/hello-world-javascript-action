@@ -15,7 +15,7 @@ on:
                     OPTIONS
                 required: true
                 default: 'GET'
-                type: string
+                type: choice
                 options:
                     - GET
                     - POST
@@ -28,7 +28,7 @@ on:
             headers:
                 description: Request Headers in JSON-Format
                 required: false
-                #                default: '{ "accept":"application/json" }'
+                # default: '{ "accept":"application/json" }'
                 type: string
 
             body:
@@ -43,9 +43,11 @@ on:
                     specified, the body is not read.
                 required: false
                 default: ''
+                type: choice
                 options:
                     - JSON
                     - TEXT
+                    - ''
 
             http-status:
                 description: The expected http status

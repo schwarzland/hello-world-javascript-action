@@ -34764,10 +34764,6 @@ const github = __nccwpck_require__(3228)
 
 //https://www.npmjs.com/package/html-to-text
 const { convert } = __nccwpck_require__(4527)
-const options = {
-    wordwrap: 130
-    // ...
-}
 
 class InputParameters {
     url
@@ -34901,7 +34897,7 @@ async function tryFetch(inputParameters) {
                 break
             case 'TEXT':
                 data = await response.text()
-                const text = convert(data, options) // https://www.npmjs.com/package/html-to-text
+                const text = convert(data, { wordwrap: 130 }) // https://www.npmjs.com/package/html-to-text
                 core.setOutput('response', text)
                 core.info(`response text: ${text}`)
                 break
@@ -34909,7 +34905,7 @@ async function tryFetch(inputParameters) {
                 core.info(
                     'body-reading-method not specified, the response-body is not read'
                 )
-                core.setOutput('response', '')
+                core.setOutput('response', undefined)
         }
     } catch (error) {
         if (error.name === 'TimeoutError') {
