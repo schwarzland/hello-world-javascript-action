@@ -49,129 +49,42 @@ for a resource to start
 Here's an example of how to use this action in a workflow file:
 
 ```yaml
-name: Wait for a Response Workflow
+name: Test Wait-For-Response-Action
 
 on:
-    workflow_dispatch:
-        inputs:
-            url:
-                description: The URL to be checked
-                required: true
-                default: 'https://api.sampleapis.com/futurama/info'
-                type: string
-
-            method:
-                description:
-                    Allowed methods are GET, POST, PUT, PATCH, DELETE, HEAD,
-                    OPTIONS
-                required: true
-                default: 'GET'
-                type: choice
-                options:
-                    - GET
-                    - POST
-                    - PUT
-                    - PATCH
-                    - DELETE
-                    - HEAD
-                    - OPTIONS
-
-            headers:
-                description: Request Headers in JSON-Format
-                required: false
-                # default: '{ "accept":"application/json" }'
-                type: string
-
-            body:
-                description: Body of the Request
-                required: false
-                default: ''
-
-            body-reading-method:
-                description:
-                    Specifies how the response body should be interpreted.
-                    Possible values are JSON, TEXT. If the method is not
-                    specified, the body is not read.
-                required: false
-                default: ''
-                type: string
-
-            http-status:
-                description: The expected http status
-                required: false
-                default: '200'
-                type: string
-
-            timeout:
-                description:
-                    The timeout (at least 500 milliseconds) determines when the
-                    entire query should be aborted..
-                required: false
-                default: '5000'
-                type: string
-
-            single-fetch-timeout:
-                description:
-                    The timeout (at least 200 milliseconds) determines when the
-                    single fetch should be aborted.
-                required: false
-                default: '1000'
-
-            waiting-time:
-                description:
-                    The waiting time (at least 200 milliseconds) after a fetch
-                    if the desired status has not yet been reached.
-                required: false
-                default: '1000'
-
-permissions:
-    actions: read
-    contents: read
+    push:
+        branches:
+            - main
 
 jobs:
-    wait-for-response-test:
-        name: Tests the Wait-For-Response-Action manually
+    test-action:
+        name: GitHub Actions Test
         runs-on: ubuntu-latest
 
         steps:
-            # Change @main to a specific commit SHA or version tag, e.g.:
-            # actions/hello-world-javascript-action@e76147da8e5c81eaf017dede5645551d4b94427b
-            # actions/hello-world-javascript-action@v1.2.3
-            - name: Test Wait for Response
+            #            - name: Checkout
+            #              id: checkout
+            #              uses: actions/checkout@v4
+            - name: Test local action 'Wait for Response' with Futurama
               id: waitForResponse
               uses: schwarzland/wait-for-response-action@main
               with:
-                  url: ${{ inputs.url }}
-                  method: ${{ inputs.method }}
-                  headers: ${{ inputs.headers }}
-                  body: ${{ inputs.body }}
-                  body-reading-method: ${{ inputs.body-reading-method }}
-                  http-status: ${{ inputs.http-status }}
-                  timeout: ${{ inputs.timeout }}
-                  single-fetch-timeout: ${{ inputs.single-fetch-timeout }}
-                  waiting-time: ${{ inputs.waiting-time }}
+                  url: 'https://api.sampleapis.com/futurama/info'
+                  method: 'GET'
+                  headers: '{ "accept":"application/json" }'
+                  body-reading-method: 'JSON'
+                  http-status: '200'
+                  timeout: '2000'
+                  single-fetch-timeout: '500'
+                  waiting-time: '500'
 
             - name: Print Output
-              id: output
               run: |
                   echo duration=${{ steps.waitForResponse.outputs.duration }}
                   echo actual http-status=${{ steps.waitForResponse.outputs.http-status }}
+                  echo response=${{ toJSON(steps.waitForResponse.outputs.response) }}
                   echo result=${{ steps.waitForResponse.outputs.result }}
-
-            - name: Print JSON
-              if: ${{ inputs.body-reading-method == 'JSON' }}
-              run: |
-                  echo response json=${{ toJSON(steps.waitForResponse.outputs.response) }}
-
-            - name: Print TEXT
-              if: ${{ inputs.body-reading-method == 'TEXT' }}
-              run: |
-                  echo response text=${{ steps.waitForResponse.outputs.response }}
 ```
-
-For example workflow runs, check out the
-[Actions tab](https://github.com/actions/hello-world-javascript-action/actions)!
-🚀
 
 ## Inputs
 

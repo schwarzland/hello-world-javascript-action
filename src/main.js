@@ -187,6 +187,7 @@ async function run() {
         // try to get a response
         const timeStart = new Date().getTime()
         let httpStatus = null
+        let result = null
 
         let maxLoop = Math.ceil(
             inputParameters.timeout / inputParameters.waitingTime
@@ -194,12 +195,11 @@ async function run() {
         do {
             core.info(`--- maxLoop: ${maxLoop}`)
             httpStatus = await tryFetch(inputParameters)
-            core.setOutput('http-status', httpStatus)
 
             if (httpStatus !== 'Error') {
                 if (httpStatus === inputParameters.httpStatus) {
                     core.info(`desired http-status achieved: ${httpStatus}`)
-                    core.setOutput('result', 'ok')
+                    result = 'ok'
                     break
                 }
             }
@@ -207,7 +207,7 @@ async function run() {
             const time = new Date().getTime() - timeStart
             if (time > inputParameters.timeout) {
                 core.error(`timeout reached: ${time} ms`)
-                core.setOutput('result', 'timeout')
+                result = 'timeout'
                 break
             }
 
@@ -220,18 +220,15 @@ async function run() {
 
         if (maxLoop <= 0) {
             core.error(`maxLoop reached`)
-            core.setOutput('result', 'maxLoop')
+            result = 'maxLoop'
         }
 
-        // Outputs
         const duration = new Date().getTime() - timeStart
         core.setOutput('duration', duration)
         core.info(`duration: ${duration} ms`)
-
-        // Output the payload for debugging
-        //    core.info(
-        //      `The event payload: ${JSON.stringify(github.context.payload, null, 2)}`
-        //    )
+        core.setOutput('result', result)
+        core.info(`result: ${result} ms`)
+        core.setOutput('http-status', httpStatus)
     } catch (error) {
         // Fail the workflow step if an error occurs
         core.setFailed(`Action error: ${error.message}`)
