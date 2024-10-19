@@ -34950,7 +34950,9 @@ async function run() {
         const timeStart = new Date().getTime()
         let httpStatus = null
 
-        let maxLoop = inputParameters.timeout / inputParameters.waitingTime
+        let maxLoop = Math.ceil(
+            inputParameters.timeout / inputParameters.waitingTime
+        )
         do {
             core.info(`--- maxLoop: ${maxLoop}`)
             httpStatus = await tryFetch(inputParameters)
