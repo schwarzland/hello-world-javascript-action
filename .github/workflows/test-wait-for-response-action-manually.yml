@@ -39,9 +39,10 @@ on:
             body-reading-method:
                 description:
                     Specifies how the response body should be interpreted.
-                    Possible values are JSON, TEXT
+                    Possible values are JSON, TEXT. If the method is not
+                    specified, the body is not read.
                 required: false
-                default: JSON
+                default: ''
                 options:
                     - JSON
                     - TEXT

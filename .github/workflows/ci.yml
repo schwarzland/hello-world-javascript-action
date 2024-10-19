@@ -80,7 +80,7 @@ jobs:
                   method: 'GET'
                   # headers: '{ "accept":"application/json" }'
                   # body: ''
-                  body-reading-method: 'TEXT'
+                  # body-reading-method: 'TEXT'
                   http-status: '200'
                   timeout: '5000'
                   single-fetch-timeout: '1000'

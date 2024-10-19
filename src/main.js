@@ -45,9 +45,11 @@ function getInputParameters() {
         core.info(`body: ${inputParameters.body}`)
     }
 
-    inputParameters.bodyReadingMethod = core.getInput('body-reading-method', {
-        required: false
-    })
+    inputParameters.bodyReadingMethod = core
+        .getInput('body-reading-method', {
+            required: false
+        })
+        .toUpperCase()
     core.info(`body-reading-method: ${inputParameters.bodyReadingMethod}`)
 
     inputParameters.httpStatus = parseInt(
@@ -79,7 +81,7 @@ function getInputParameters() {
         core.getInput('waiting-time', { required: false })
     )
     if (inputParameters.waitingTime < 200) {
-        core.warning('waiting-time < 200 ms, new timeout = 200 ms')
+        core.warning('waiting-time < 200 ms, new waiting-time = 200 ms')
         inputParameters.waitingTime = 200
     }
     core.info(`waiting-time: ${inputParameters.waitingTime}`)
@@ -125,7 +127,10 @@ async function tryFetch(inputParameters) {
                 core.info(`response text: ${text}`)
                 break
             default:
-                core.error('body-reading-method unknown')
+                core.info(
+                    'body-reading-method not specified, the response-body is not read'
+                )
+                core.setOutput('response', '')
         }
     } catch (error) {
         if (error.name === 'TimeoutError') {
@@ -134,12 +139,10 @@ async function tryFetch(inputParameters) {
             )
             return 'Error'
         } else if (error.name === 'AbortError') {
-            core.error(
-                'Fetch aborted by user action (browser stop button, closing tab, etc.'
-            )
+            core.error('Fetch aborted by user action!')
             return 'Error'
         } else if (error.name === 'TypeError') {
-            core.error('AbortSignal.timeout() method is not supported')
+            core.error('AbortSignal.timeout() method is not supported!')
             return 'Error'
         } else {
             // A network error, or some other problem.
