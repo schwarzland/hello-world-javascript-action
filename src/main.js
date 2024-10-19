@@ -233,7 +233,7 @@ async function run() {
         core.setOutput('duration', duration)
         core.info(`duration: ${duration} ms`)
         core.setOutput('result', result)
-        core.info(`result: ${result} ms`)
+        core.info(`result: ${result}`)
         core.setOutput('http-status', httpStatus)
 
         if (result !== 'OK' && inputParameters.stopOnError) {

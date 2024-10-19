@@ -61,7 +61,7 @@ inputs:
         default: '1000'
 
     stop-on-error:
-        description: If TRUE, the action is aborted on error.
+        description: If TRUE, the action is aborted on timeout-error.
         required: false
         default: 'FALSE'
 

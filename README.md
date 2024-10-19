@@ -96,6 +96,7 @@ jobs:
 | `timeout`              |          | `5000`  | The timeout (at least 500 milliseconds) determines when the entire query should be aborted.                                                  |
 | `single-fetch-timeout` |          | `1000`  | The timeout (at least 200 milliseconds) determines when the single fetch should be aborted.                                                  |
 | `waiting-time`         |          | `1000`  | The waiting time (at least 200 milliseconds) after a fetch if the desired status has not yet been reached.                                   |
+| `stop-on-error`        |          | `FALSE` | If TRUE, the action is aborted on timeout-error                                                                                              |
 
 ## Outputs
 
