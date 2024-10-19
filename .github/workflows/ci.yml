@@ -47,11 +47,7 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            #            - name: Checkout
-            #              id: checkout
-            #              uses: actions/checkout@v4
-
-            - name: Test local action 'Wait for Response' with Futurama
+            - name: Test 'Wait for Response' with Futurama
               id: waitForResponse1
               uses: schwarzland/wait-for-response-action@main
               with:
@@ -72,7 +68,11 @@ jobs:
                   echo response=${{ toJSON(steps.waitForResponse1.outputs.response) }}
                   echo result=${{ steps.waitForResponse1.outputs.result }}
 
-            - name: Test local action 'Wait for Response' with Google
+            - name: Check does it work
+              if: ${{ steps.waitForResponse1.outputs.result == 'ok' }}
+              run: echo It work's
+
+            - name: Test 'Wait for Response' with Google
               id: waitForResponse2
               uses: schwarzland/wait-for-response-action@main
               with:
