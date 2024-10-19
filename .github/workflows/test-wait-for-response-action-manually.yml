@@ -73,6 +73,11 @@ on:
                 required: false
                 default: '1000'
 
+            stop-on-error:
+                description: If TRUE, the action is aborted on error.
+                required: false
+                default: 'FALSE'
+
 permissions:
     actions: read
     contents: read

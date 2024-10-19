@@ -47,7 +47,7 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - name: Test 'Wait for Response' with Futurama
+            - name: Test Wait-For-Response with Futurama
               id: waitForResponse1
               uses: schwarzland/wait-for-response-action@main
               with:
@@ -60,6 +60,7 @@ jobs:
                   timeout: '2000'
                   single-fetch-timeout: '500'
                   waiting-time: '500'
+                  stop-on-error: true
 
             - name: Print Output
               run: |
@@ -68,11 +69,11 @@ jobs:
                   echo response=${{ toJSON(steps.waitForResponse1.outputs.response) }}
                   echo result=${{ steps.waitForResponse1.outputs.result }}
 
-            - name: Check does it work
-              if: ${{ steps.waitForResponse1.outputs.result == 'ok' }}
-              run: echo It work's
+            - name: check OK
+              if: ${{ steps.waitForResponse1.outputs.result == 'OK' }}
+              run: echo 'It work`s'
 
-            - name: Test 'Wait for Response' with Google
+            - name: Test Wait-For-Response with Google
               id: waitForResponse2
               uses: schwarzland/wait-for-response-action@main
               with:

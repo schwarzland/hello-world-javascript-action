@@ -62,9 +62,6 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            #            - name: Checkout
-            #              id: checkout
-            #              uses: actions/checkout@v4
             - name: Test local action 'Wait for Response' with Futurama
               id: waitForResponse
               uses: schwarzland/wait-for-response-action@main
@@ -107,4 +104,4 @@ jobs:
 | `duration`    | The time in milliseconds it took to complete the request. |
 | `http-status` | The achieved HTTP-Status                                  |
 | `response`    | The service's response                                    |
-| `result`      | query result "ok", "timeout", "maxLoop"                   |
+| `result`      | query result "OK", "timeout", "maxLoop"                   |

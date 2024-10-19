@@ -60,6 +60,11 @@ inputs:
         required: false
         default: '1000'
 
+    stop-on-error:
+        description: If TRUE, the action is aborted on error.
+        required: false
+        default: 'FALSE'
+
 outputs:
     duration:
         description: The time it took to complete the request.

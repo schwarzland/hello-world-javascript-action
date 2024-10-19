@@ -14,6 +14,7 @@ class InputParameters {
     timeout
     singleFetchTimeout
     waitingTime
+    stopOnError
 }
 
 function getInputParameters() {
@@ -99,6 +100,11 @@ function getInputParameters() {
         inputParameters.waitingTime = 600000
     }
     core.info(`waiting-time: ${inputParameters.waitingTime}`)
+
+    inputParameters.stopOnError =
+        core.getInput('stop-on-error', { required: false }).toLowerCase() ===
+        'true'
+    core.info(`stop-on-error: ${inputParameters.stopOnError}`)
 
     return inputParameters
 }
@@ -199,7 +205,7 @@ async function run() {
             if (httpStatus !== 'Error') {
                 if (httpStatus === inputParameters.httpStatus) {
                     core.info(`desired http-status achieved: ${httpStatus}`)
-                    result = 'ok'
+                    result = 'OK'
                     break
                 }
             }
@@ -229,6 +235,12 @@ async function run() {
         core.setOutput('result', result)
         core.info(`result: ${result} ms`)
         core.setOutput('http-status', httpStatus)
+
+        if (result !== 'OK' && inputParameters.stopOnError) {
+            core.setFailed(
+                `Action failed because of stop-on-error is set and result is not OK: ${result}`
+            )
+        }
     } catch (error) {
         // Fail the workflow step if an error occurs
         core.setFailed(`Action error: ${error.message}`)
