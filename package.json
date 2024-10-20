@@ -1,16 +1,16 @@
 {
-  "name": "hello-world-javascript-action",
+  "name": "wait-for-response-action",
   "description": "This action prints `Hello, World!` or `Hello, <who-to-greet>!` to the log",
   "version": "1.0.0",
   "author": "",
   "private": true,
-  "homepage": "https://github.com/actions/hello-world-javascript-action#readme",
+  "homepage": "https://github.com/marketplace/actions/wait-for-response-action#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/hello-world-javascript-action.git"
+    "url": "git+https://github.com/marketplace/actions/wait-for-response-action.git"
   },
   "bugs": {
-    "url": "https://github.com/actions/hello-world-javascript-action/issues"
+    "url": "https://github.com/marketplace/actions/wait-for-response-action/issues"
   },
   "keywords": [
     "GitHub",
