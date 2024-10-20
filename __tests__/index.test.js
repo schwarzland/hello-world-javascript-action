@@ -1,5 +1,8 @@
 /**
  * Unit tests for the action's entrypoint, src/index.js
+ *
+ * https://jestjs.io/
+ *
  */
 
 const { run } = require('../src/main')

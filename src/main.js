@@ -246,4 +246,4 @@ async function run() {
   }
 }
 
-export { run }
+exports.run = run
