@@ -1,83 +1,86 @@
 name: Wait for Response Action
 description:
-    Checks a URL and expects a response within a defined time and with a defined
-    status.
+  Checks a URL and expects a response within a defined time and with a defined
+  status.
 author: schwarzland.de
 
+branding:
+  icon: 'clock'
+  color: 'blue'
+
 inputs:
-    url:
-        description: The URL to be checked
-        required: true
-        default: 'https://www.google.com'
+  url:
+    description: The URL to be checked
+    required: true
+    default: 'https://www.google.com'
 
-    method:
-        description:
-            Allowed methods are GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS
-        required: false
-        default: 'GET'
+  method:
+    description:
+      Allowed methods are GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS
+    required: false
+    default: 'GET'
 
-    headers:
-        description: Request Headers in JSON-Format
-        required: false
-        default: ''
+  headers:
+    description: Request Headers in JSON-Format
+    required: false
+    default: ''
 
-    body:
-        description: Body of the Request
-        required: false
-        default: ''
+  body:
+    description: Body of the Request
+    required: false
+    default: ''
 
-    body-reading-method:
-        description:
-            Specifies how the response body should be interpreted. Possible
-            values are JSON, TEXT. If the method is not specified, the body is
-            not read.
-        required: false
-        default: ''
+  body-reading-method:
+    description:
+      Specifies how the response body should be interpreted. Possible values are
+      JSON, TEXT. If the method is not specified, the body is not read.
+    required: false
+    default: ''
 
-    http-status:
-        description: The expected http status
-        required: false
-        default: '200'
+  http-status:
+    description: The expected http status
+    required: false
+    default: '200'
 
-    timeout:
-        description:
-            The timeout (at least 500 milliseconds) determines when the entire
-            query should be aborted.
-        required: false
-        default: '5000'
+  timeout:
+    description:
+      The timeout (at least 500 milliseconds) determines when the entire query
+      should be aborted.
+    required: false
+    default: '5000'
 
-    single-fetch-timeout:
-        description:
-            The timeout (at least 200 milliseconds) determines when the single
-            fetch should be aborted.
-        required: false
-        default: '1000'
+  single-fetch-timeout:
+    description:
+      The timeout (at least 200 milliseconds) determines when the single fetch
+      should be aborted.
+    required: false
+    default: '1000'
 
-    waiting-time:
-        description:
-            The waiting time (at least 200 milliseconds) after a fetch if the
-            desired status has not yet been reached.
-        required: false
-        default: '1000'
+  waiting-time:
+    description:
+      The waiting time (at least 200 milliseconds) after a fetch if the desired
+      status has not yet been reached.
+    required: false
+    default: '1000'
 
-    stop-on-error:
-        description: If TRUE, the action is aborted on timeout-error.
-        required: false
-        default: 'false'
+  stop-on-error:
+    description: If TRUE, the action is aborted on timeout-error.
+    required: false
+    default: 'false'
 
 outputs:
-    duration:
-        description: The time it took to complete the request.
+  duration:
+    description: The time it took to complete the request.
 
-    http-status:
-        description: HTTP-Status
+  http-status:
+    description: HTTP-Status
 
-    response:
-        description: The service's response
+  response:
+    description: The service's response
 
-    result:
-        description: query result (OK, timeout, maxLoop)
+  result:
+    description: query result (OK, timeout, maxLoop)
 
 runs:
-    using: node20
-    main: dist/index.js
+  using: node20
+  main: dist/index.js

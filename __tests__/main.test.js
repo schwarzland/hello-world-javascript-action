@@ -18,73 +18,73 @@ const runMock = jest.spyOn(main, 'run')
 const timeRegex = /^\d{2}:\d{2}:\d{2}/
 
 describe('action', () => {
-    beforeEach(() => {
-        jest.clearAllMocks()
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
+  it('sets the time output', async () => {
+    // Mock the action's inputs
+    getInputMock.mockImplementation(name => {
+      switch (name) {
+        case 'who-to-greet':
+          return 'World'
+        default:
+          return ''
+      }
     })
 
-    it('sets the time output', async () => {
-        // Mock the action's inputs
-        getInputMock.mockImplementation(name => {
-            switch (name) {
-                case 'who-to-greet':
-                    return 'World'
-                default:
-                    return ''
-            }
-        })
+    // Mock the action's payload
+    github.context.payload = {}
 
-        // Mock the action's payload
-        github.context.payload = {}
+    await main.run()
 
-        await main.run()
+    expect(runMock).toHaveReturned()
+    expect(setOutputMock).toHaveBeenCalledWith('time', expect.any(String))
+  })
 
-        expect(runMock).toHaveReturned()
-        expect(setOutputMock).toHaveBeenCalledWith('time', expect.any(String))
+  it('logs the event payload', async () => {
+    // Mock the action's inputs
+    getInputMock.mockImplementation(name => {
+      switch (name) {
+        case 'who-to-greet':
+          return 'World'
+        default:
+          return ''
+      }
     })
 
-    it('logs the event payload', async () => {
-        // Mock the action's inputs
-        getInputMock.mockImplementation(name => {
-            switch (name) {
-                case 'who-to-greet':
-                    return 'World'
-                default:
-                    return ''
-            }
-        })
+    // Mock the action's payload
+    github.context.payload = {
+      actor: 'mona'
+    }
 
-        // Mock the action's payload
-        github.context.payload = {
-            actor: 'mona'
-        }
+    await main.run()
 
-        await main.run()
+    expect(runMock).toHaveReturned()
+    expect(infoMock).toHaveBeenCalledWith(
+      `The event payload: ${JSON.stringify(github.context.payload, null, 2)}`
+    )
+  })
 
-        expect(runMock).toHaveReturned()
-        expect(infoMock).toHaveBeenCalledWith(
-            `The event payload: ${JSON.stringify(github.context.payload, null, 2)}`
-        )
+  it('sets a failed status', async () => {
+    // Mock the action's inputs
+    getInputMock.mockImplementation(name => {
+      switch (name) {
+        case 'who-to-greet':
+          throw new Error('Something went wrong...')
+        default:
+          return ''
+      }
     })
 
-    it('sets a failed status', async () => {
-        // Mock the action's inputs
-        getInputMock.mockImplementation(name => {
-            switch (name) {
-                case 'who-to-greet':
-                    throw new Error('Something went wrong...')
-                default:
-                    return ''
-            }
-        })
+    // Mock the action's payload
+    github.context.payload = {
+      actor: 'mona'
+    }
 
-        // Mock the action's payload
-        github.context.payload = {
-            actor: 'mona'
-        }
+    await main.run()
 
-        await main.run()
-
-        expect(runMock).toHaveReturned()
-        expect(setFailedMock).toHaveBeenCalledWith('Something went wrong...')
-    })
+    expect(runMock).toHaveReturned()
+    expect(setFailedMock).toHaveBeenCalledWith('Something went wrong...')
+  })
 })

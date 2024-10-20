@@ -1,96 +1,96 @@
 name: Continuous Integration
 
 on:
-    pull_request:
-    push:
-        branches:
-            - main
+  pull_request:
+  push:
+    branches:
+      - main
 
 permissions:
-    contents: read
+  contents: read
 
 jobs:
-    #  test-javascript:
-    #    name: JavaScript Tests
-    #    runs-on: ubuntu-latest
-    #
-    #    steps:
-    #      - name: Checkout
-    #        id: checkout
-    #        uses: actions/checkout@v4
-    #
-    #      - name: Setup Node.js
-    #        id: setup-node
-    #        uses: actions/setup-node@v4
-    #        with:
-    #          node-version-file: .node-version
-    #          cache: npm
-    #
-    #      - name: Install Dependencies
-    #        id: npm-ci
-    #        run: npm ci
-    #
-    #      - name: Check Format
-    #        id: npm-format-check
-    #        run: npm run format:check
-    #
-    #      - name: Lint
-    #        id: npm-lint
-    #        run: npm run lint
-    #
-    #      - name: Test
-    #        id: npm-ci-test
-    #        run: npm run ci-test
+  #  test-javascript:
+  #    name: JavaScript Tests
+  #    runs-on: ubuntu-latest
+  #
+  #    steps:
+  #      - name: Checkout
+  #        id: checkout
+  #        uses: actions/checkout@v4
+  #
+  #      - name: Setup Node.js
+  #        id: setup-node
+  #        uses: actions/setup-node@v4
+  #        with:
+  #          node-version-file: .node-version
+  #          cache: npm
+  #
+  #      - name: Install Dependencies
+  #        id: npm-ci
+  #        run: npm ci
+  #
+  #      - name: Check Format
+  #        id: npm-format-check
+  #        run: npm run format:check
+  #
+  #      - name: Lint
+  #        id: npm-lint
+  #        run: npm run lint
+  #
+  #      - name: Test
+  #        id: npm-ci-test
+  #        run: npm run ci-test
 
-    test-action:
-        name: GitHub Actions Test
-        runs-on: ubuntu-latest
+  test-action:
+    name: GitHub Actions Test
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Test Wait-For-Response with Futurama
-              id: waitForResponse1
-              uses: schwarzland/wait-for-response-action@main
-              with:
-                  url: 'https://api.sampleapis.com/futurama/info'
-                  method: GET
-                  headers: '{ "accept":"application/json" }'
-                  body: ''
-                  body-reading-method: JSON
-                  http-status: 200
-                  timeout: 5000
-                  single-fetch-timeout: 500
-                  waiting-time: 500
-                  stop-on-error: true
+    steps:
+      - name: Test Wait-For-Response with Futurama
+        id: waitForResponse1
+        uses: schwarzland/wait-for-response-action@main
+        with:
+          url: 'https://api.sampleapis.com/futurama/info'
+          method: GET
+          headers: '{ "accept":"application/json" }'
+          body: ''
+          body-reading-method: JSON
+          http-status: 200
+          timeout: 5000
+          single-fetch-timeout: 500
+          waiting-time: 500
+          stop-on-error: true
 
-            - name: Print Output
-              run: |
-                  echo duration=${{ steps.waitForResponse1.outputs.duration }}
-                  echo actual http-status=${{ steps.waitForResponse1.outputs.http-status }}
-                  echo response=${{ toJSON(steps.waitForResponse1.outputs.response) }}
-                  echo result=${{ steps.waitForResponse1.outputs.result }}
+      - name: Print Output
+        run: |
+          echo duration=${{ steps.waitForResponse1.outputs.duration }}
+          echo actual http-status=${{ steps.waitForResponse1.outputs.http-status }}
+          echo response=${{ toJSON(steps.waitForResponse1.outputs.response) }}
+          echo result=${{ steps.waitForResponse1.outputs.result }}
 
-            - name: check OK
-              if: ${{ steps.waitForResponse1.outputs.result == 'OK' }}
-              run: echo 'It work`s'
+      - name: check OK
+        if: ${{ steps.waitForResponse1.outputs.result == 'OK' }}
+        run: echo 'It work`s'
 
-            - name: Test Wait-For-Response with Google
-              id: waitForResponse2
-              uses: schwarzland/wait-for-response-action@main
-              with:
-                  url: 'https://www.google.de'
-                  # method: 'GET'
-                  # headers: '{ "accept":"application/json" }'
-                  # body: ''
-                  # body-reading-method: 'TEXT'
-                  # http-status: '200'
-                  # timeout: '5000'
-                  # single-fetch-timeout: '1000'
-                  # waiting-time: '1000'
-                  # stop-on-error: false
+      - name: Test Wait-For-Response with Google
+        id: waitForResponse2
+        uses: schwarzland/wait-for-response-action@main
+        with:
+          url: 'https://www.google.de'
+          # method: 'GET'
+          # headers: '{ "accept":"application/json" }'
+          # body: ''
+          # body-reading-method: 'TEXT'
+          # http-status: '200'
+          # timeout: '5000'
+          # single-fetch-timeout: '1000'
+          # waiting-time: '1000'
+          # stop-on-error: false
 
-            - name: Print Output
-              run: |
-                  echo duration=${{ steps.waitForResponse2.outputs.duration }}
-                  echo actual http-status=${{ steps.waitForResponse2.outputs.http-status }}
-                  echo response='${{ steps.waitForResponse2.outputs.response }}'
-                  echo result=${{ steps.waitForResponse2.outputs.result }}
+      - name: Print Output
+        run: |
+          echo duration=${{ steps.waitForResponse2.outputs.duration }}
+          echo actual http-status=${{ steps.waitForResponse2.outputs.http-status }}
+          echo response='${{ steps.waitForResponse2.outputs.response }}'
+          echo result=${{ steps.waitForResponse2.outputs.result }}
