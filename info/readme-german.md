@@ -1,3 +1,5 @@
+Die Aktion wartet auf eine Antwort von einer Resource (URL). Sie kann beispielsweise verwendet werden, um auf den Start eines Backends oder eines Frontends nach einem deployment zu warten um anschließend einen Smoke-Test mit z. B. Bruno oder Postman durchzuführen.
+
 Da nach einem Deployment der Start der Ressourcen etwas dauert und je nach
 Umgebung durchaus einige Minuten betragen kann, ist es sinnvoll, den Start der
 Ressource aktiv zu verfolgen und dann die Pipeline mit den nächsten Schritten
