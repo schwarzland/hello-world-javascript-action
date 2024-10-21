@@ -25,11 +25,6 @@ If the desired HTTP status (e.g. http-status: 200) has not been reached within
 the time period (e.g. timeout: 60000), the action aborts the pipeline as desired
 (stop-on-error: true) or continues processing (stop-on-error: false).
 
-Die Aktion wartet auf eine Antwort von einer Resource (URL). Sie kann
-beispielsweise verwendet werden, um auf den Start eines Backends oder eines
-Frontends nach einem deployment zu warten um anschließend einen Smoke-Test mit
-z. B. Bruno oder Postman durchzuführen.
-
 ## Usage
 
 Here's an example of how to use this action in a workflow file:
